@@ -1,4 +1,4 @@
-# Calculadora LCSP - Diputació de Castelló
+# Calculadora LCSP
 
 Calculadora web para el cómputo de plazos administrativos según la **Ley 9/2017, de 8 de noviembre, de Contratos del Sector Público (LCSP)**.
 
@@ -12,7 +12,7 @@ Calculadora web para el cómputo de plazos administrativos según la **Ley 9/201
 Herramienta de cálculo orientativa para determinar fechas de vencimiento de plazos en procedimientos de contratación pública. Incluye:
 
 - Cómputo de **días naturales** y **días hábiles**
-- Calendario de festivos de **Castellón** (nacionales, autonómicos y locales)
+- Calendario de festivos (nacionales, autonómicos y locales)
 - Prórroga automática cuando el último día cae en inhábil
 - Aplicación de la regla **Dies a Quo** (el cómputo comienza el día siguiente)
 
@@ -32,7 +32,7 @@ Herramienta de cálculo orientativa para determinar fechas de vencimiento de pla
 ### Calendario de Festivos
 - Festivos nacionales 2025-2026
 - Festivos de la Comunidad Valenciana
-- Festivos locales de Castellón de la Plana
+- Festivos locales
 
 ### Internacionalización (i18n)
 - **Castellano** (ES)
@@ -94,12 +94,6 @@ src/
 └── index.css            # Estilos globales
 ```
 
-## 📜 Referencias legales
-
-- [Ley 9/2017 LCSP (BOE)](https://www.boe.es/buscar/act.php?id=BOE-A-2017-12902)
-- [Ley 39/2015 Procedimiento Administrativo](https://www.boe.es/buscar/act.php?id=BOE-A-2015-10565)
-- Disposición Adicional 12ª LCSP (cómputo de plazos)
-
 ## ⚠️ Aviso legal
 
 **Esta herramienta tiene carácter orientativo.** Los cálculos no sustituyen el análisis jurídico profesional. Consulte siempre la normativa vigente y los servicios jurídicos competentes para determinar plazos oficiales.
@@ -114,8 +108,8 @@ src/
 
 ## 📄 Licencia
 
-Uso interno - Diputació de Castelló
+MIT License
 
 ---
 
-Desarrollado para la **Diputació de Castelló** | 2026
+2026
