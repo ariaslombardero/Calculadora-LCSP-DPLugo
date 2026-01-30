@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Reset y estilos base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Open Sans', system-ui, sans-serif;
+  color: #0F172A;
+  background-color: #FFFFFF;
+  line-height: 1.6;
+}
+
+/* Mejoras de accesibilidad para focus */
+*:focus-visible {
+  outline: 2px solid #BA0C2F;
+  outline-offset: 2px;
+}
+
+/* Estilos para inputs de fecha en diferentes navegadores */
+input[type="date"] {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+/* Transiciones suaves globales */
+button, a, input, select {
+  transition: all 0.2s ease;
+}
+
+/* Estilos para selects */
+select {
+  background-image: none;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
