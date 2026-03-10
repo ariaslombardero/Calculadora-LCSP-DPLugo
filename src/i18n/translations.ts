@@ -224,5 +224,5 @@ export const translations = {
     }
 } as const;
 
-export type Language = 'es' | 'gl';
+export type Language = 'es' | 'gl' | 'va';
 export type TranslationKey = keyof typeof translations.es;
