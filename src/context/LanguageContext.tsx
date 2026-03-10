@@ -1,6 +1,6 @@
 /**
  * LanguageContext - Contexto para gestionar el idioma de la aplicación
- * Soporta: Castellano (es) y Valenciano (va)
+ * Soporta: Castellano (es) y Gallego (gl)
  */
 
 import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
@@ -18,7 +18,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const [language, setLanguageState] = useState<Language>(() => {
         // Intentar recuperar del localStorage
         const saved = localStorage.getItem('lcsp-language');
-        return (saved === 'es' || saved === 'va') ? saved : 'es';
+        return (saved === 'es' || saved === 'gl') ? saved : 'es';
     });
 
     const setLanguage = useCallback((lang: Language) => {

@@ -5,7 +5,7 @@
 
 import { useState } from 'react';
 import { Calendar, ChevronDown, ChevronUp, X } from 'lucide-react';
-import { HOLIDAYS_CASTELLON, Holiday } from '../data/holidays';
+import { HOLIDAYS_LUGO, Holiday } from '../data/holidays';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 
@@ -19,7 +19,7 @@ export function HolidayCalendar({ year = new Date().getFullYear() }: HolidayCale
     const { isDark } = useTheme();
 
     // Filtrar festivos por año
-    const holidaysForYear = HOLIDAYS_CASTELLON.filter(h => h.date.startsWith(String(year)));
+    const holidaysForYear = HOLIDAYS_LUGO.filter(h => h.date.startsWith(String(year)));
 
     // Agrupar por tipo
     const nationalHolidays = holidaysForYear.filter(h => h.type === 'nacional');
@@ -81,8 +81,8 @@ export function HolidayCalendar({ year = new Date().getFullYear() }: HolidayCale
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className={`flex items-center gap-2 px-4 py-2 text-sm border rounded-sm transition-colors duration-200 ${isDark
-                        ? 'text-gray-300 border-gray-600 hover:text-white hover:border-gray-500'
-                        : 'text-diputacio-muted border-gray-200 hover:text-diputacio-red hover:border-diputacio-red'
+                    ? 'text-gray-300 border-gray-600 hover:text-white hover:border-gray-500'
+                    : 'text-diputacio-muted border-gray-200 hover:text-diputacio-red hover:border-diputacio-red'
                     }`}
                 aria-expanded={isOpen}
                 aria-label="Ver calendario de festivos"
@@ -95,13 +95,13 @@ export function HolidayCalendar({ year = new Date().getFullYear() }: HolidayCale
             {/* Panel desplegable */}
             {isOpen && (
                 <div className={`absolute right-0 top-12 z-50 w-96 max-w-[calc(100vw-2rem)] border rounded-sm shadow-lg ${isDark
-                        ? 'bg-gray-800 border-gray-700'
-                        : 'bg-white border-gray-200'
+                    ? 'bg-gray-800 border-gray-700'
+                    : 'bg-white border-gray-200'
                     }`}>
                     {/* Header */}
                     <div className={`flex items-center justify-between px-4 py-3 border-b ${isDark
-                            ? 'bg-gray-900 border-gray-700'
-                            : 'bg-diputacio-gray border-gray-200'
+                        ? 'bg-gray-900 border-gray-700'
+                        : 'bg-diputacio-gray border-gray-200'
                         }`}>
                         <h3 className={`text-sm font-semibold uppercase tracking-wide ${isDark ? 'text-white' : 'text-diputacio-dark'
                             }`}>
@@ -152,8 +152,8 @@ export function HolidayCalendar({ year = new Date().getFullYear() }: HolidayCale
 
                     {/* Footer */}
                     <div className={`px-4 py-3 border-t ${isDark
-                            ? 'bg-gray-900 border-gray-700'
-                            : 'bg-diputacio-gray border-gray-200'
+                        ? 'bg-gray-900 border-gray-700'
+                        : 'bg-diputacio-gray border-gray-200'
                         }`}>
                         <p className={`text-xs text-center ${isDark ? 'text-gray-400' : 'text-diputacio-muted'}`}>
                             {t('holidaysNote')}

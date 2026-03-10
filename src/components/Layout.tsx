@@ -38,15 +38,15 @@ export function Layout({ children }: LayoutProps) {
                         </button>
                         <span className={isDark ? 'text-gray-600' : 'text-gray-300'}>|</span>
                         <button
-                            onClick={() => setLanguage('va')}
-                            className={`px-2 py-0.5 rounded-sm transition-colors ${language === 'va'
+                            onClick={() => setLanguage('gl')}
+                            className={`px-2 py-0.5 rounded-sm transition-colors ${language === 'gl'
                                 ? 'bg-diputacio-red text-white'
                                 : isDark
                                     ? 'text-gray-400 hover:text-white'
                                     : 'text-gray-600 hover:text-diputacio-red'
                                 }`}
                         >
-                            VAL
+                            GAL
                         </button>
                     </div>
 

@@ -1,7 +1,7 @@
 /**
- * Traducciones de la aplicación - Castellano y Valenciano
+ * Traducciones de la aplicación - Castellano y Gallego
  * 
- * Estructura: { es: { ... }, va: { ... } }
+ * Estructura: { es: { ... }, gl: { ... } }
  */
 
 export const translations = {
@@ -24,7 +24,7 @@ export const translations = {
         ruleDiesAQuo: 'El plazo comienza el día siguiente a la publicación/notificación',
         ruleNaturales: 'Por defecto, salvo indicación expresa de días hábiles (DA 12 LCSP)',
         ruleInhabil: 'Último día inhábil: Se prorroga al primer día hábil siguiente',
-        ruleHolidays: 'Nacionales, Comunidad Valenciana y locales de Castellón',
+        ruleHolidays: 'Nacionales, Galicia y locales de Lugo',
 
         // Form labels
         phaseLabel: '1. Fase del procedimiento',
@@ -52,7 +52,7 @@ export const translations = {
         },
         urgencyStatus: {
             expired: 'VENCIDO',
-            urgent: 'URGENTE: Plazo crítico',
+            urgent: 'URGENT: Plazo crítico',
             warning: 'Atención: Plazo próximo',
             safe: 'Plazo en curso'
         },
@@ -70,7 +70,7 @@ export const translations = {
         quickTitle: 'Calculadora Rápida',
         quickSubtitle: 'Calcular plazos personalizados (días naturales o hábiles)',
         quickCalcTitle: 'Calculadora Rápida',
-        quickCalcDescription: 'Introduce manualmente el número de días y el tipo de cómputo. El sistema tendrá en cuenta el calendario de festivos de Castellón (nacionales, autonómicos y locales).',
+        quickCalcDescription: 'Introduce manualmente el número de días y el tipo de cómputo. El sistema tendrá en cuenta el calendario de festivos de Lugo (nacionales, autonómicos y locales).',
         quickCalcDays: 'Número de días',
         quickCalcType: 'Tipo de cómputo',
         quickCalcTypeHelp: {
@@ -89,8 +89,8 @@ export const translations = {
         // Holiday Calendar
         holidaysTitle: 'Calendario de Festivos',
         nationalHolidays: 'Festivos Nacionales',
-        regionalHolidays: 'Festivos Comunidad Valenciana',
-        localHolidays: 'Festivos Locales Castellón',
+        regionalHolidays: 'Festivos Galicia',
+        localHolidays: 'Festivos Locales Lugo',
         holidaysNote: 'Estos días son considerados inhábiles para el cómputo de plazos',
 
         // Categories
@@ -114,115 +114,115 @@ export const translations = {
         language: 'Idioma'
     },
 
-    va: {
+    gl: {
         // Header
         appTitle: 'Calculadora LCSP',
-        appSubtitle: 'Llei de Contractes del Sector Públic',
-        holidays: 'Festius',
+        appSubtitle: 'Lei de Contratos do Sector Público',
+        holidays: 'Festivos',
 
         // Tabs
-        tabLCSP: 'Terminis LCSP',
-        tabQuick: 'Calculadora Ràpida',
+        tabLCSP: 'Prazos LCSP',
+        tabQuick: 'Calculadora Rápida',
 
         // Calculator Form
-        calculatorTitle: 'Calculadora de Terminis',
-        calculatorSubtitle: 'Llei 9/2017, de 8 de novembre, de Contractes del Sector Públic',
+        calculatorTitle: 'Calculadora de Prazos',
+        calculatorSubtitle: 'Lei 9/2017, do 8 de novembro, de Contratos do Sector Público',
 
         // Rules info
-        rulesTitle: 'Regles de còmput aplicades:',
-        ruleDiesAQuo: 'El termini comença el dia següent a la publicació/notificació',
-        ruleNaturales: 'Per defecte, llevat d\'indicació expressa de dies hàbils (DA 12 LCSP)',
-        ruleInhabil: 'Últim dia inhàbil: Es prorroga al primer dia hàbil següent',
-        ruleHolidays: 'Nacionals, Comunitat Valenciana i locals de Castelló',
+        rulesTitle: 'Regras de cómputo aplicadas:',
+        ruleDiesAQuo: 'O prazo comeza o día seguinte á publicación/notificación',
+        ruleNaturales: 'Por defecto, salvo indicación expresa de días hábiles (DA 12 LCSP)',
+        ruleInhabil: 'Último día inhábil: Prorrógase ao primeiro día hábil seguinte',
+        ruleHolidays: 'Nacionais, Galicia e locais de Lugo',
 
         // Form labels
-        phaseLabel: '1. Fase del procediment',
+        phaseLabel: '1. Fase do procedemento',
         phasePlaceholder: 'Seleccionar fase...',
-        deadlineLabel: '2. Tipus de termini',
-        deadlinePlaceholder: 'Seleccionar termini...',
-        dateLabel: '3. Data de publicació / notificació',
-        dateHelp: 'El còmput del termini començarà el dia següent a aquesta data (Dies a Quo)',
+        deadlineLabel: '2. Tipo de prazo',
+        deadlinePlaceholder: 'Seleccionar prazo...',
+        dateLabel: '3. Data de publicación / notificación',
+        dateHelp: 'O cómputo do prazo comezará o día seguinte a esta data (Dies a Quo)',
 
         // Options
-        effectiveDays: 'Termini efectiu:',
-        reductionsTitle: 'Reduccions/Excepcions aplicables',
-        customDaysLabel: 'Nombre de dies:',
+        effectiveDays: 'Prazo efectivo:',
+        reductionsTitle: 'Reducións/Excepcións aplicables',
+        customDaysLabel: 'Número de días:',
 
         // Buttons
-        calculateBtn: 'Calcular data de venciment',
-        resetBtn: 'Nou càlcul',
+        calculateBtn: 'Calcular data de vencemento',
+        resetBtn: 'Novo cálculo',
 
         // Results
-        resultTitle: 'Data de venciment',
-        daysRemaining: 'dies restants',
+        resultTitle: 'Data de vencemento',
+        daysRemaining: 'días restantes',
         daysType: {
-            naturales: 'dies naturals',
-            habiles: 'dies hàbils'
+            naturales: 'días naturais',
+            habiles: 'días hábiles'
         },
         urgencyStatus: {
-            expired: 'VENÇUT',
-            urgent: 'URGENT: Termini crític',
-            warning: 'Atenció: Termini pròxim',
-            safe: 'Termini en curs'
+            expired: 'VENCIDO',
+            urgent: 'URXENTE: Prazo crítico',
+            warning: 'Atención: Prazo próximo',
+            safe: 'Prazo en curso'
         },
-        prorrogaNote: 'El termini original acabava en dia inhàbil i s\'ha prorrogat al següent dia hàbil',
-        reductionsApplied: 'Reduccions aplicades',
-        calculationDetails: 'Detall del còmput',
+        prorrogaNote: 'O prazo orixinal remataba en día inhábil e prorrogouse ao seguinte día hábil',
+        reductionsApplied: 'Reducións aplicadas',
+        calculationDetails: 'Detalle do cómputo',
         startDate: 'Data inicial',
-        diesAQuoDate: 'Data d\'inici (Dies a Quo)',
-        totalDays: 'Dies totals',
-        daysCount: 'Dies comptabilitzats',
-        holidaysInPeriod: 'Festius durant el període de còmput',
-        noHolidays: 'No hi ha festius durant aquest període de còmput',
+        diesAQuoDate: 'Data de inicio (Dies a Quo)',
+        totalDays: 'Días totais',
+        daysCount: 'Días contabilizados',
+        holidaysInPeriod: 'Festivos durante o período de cómputo',
+        noHolidays: 'Non hai festivos durante este período de cómputo',
 
         // Quick Calculator
-        quickTitle: 'Calculadora Ràpida',
-        quickSubtitle: 'Calcular terminis personalitzats (dies naturals o hàbils)',
-        quickCalcTitle: 'Calculadora Ràpida',
-        quickCalcDescription: 'Introdueix manualment el nombre de dies i el tipus de còmput. El sistema tindrà en compte el calendari de festius de Castelló (nacionals, autonòmics i locals).',
-        quickCalcDays: 'Nombre de dies',
-        quickCalcType: 'Tipus de còmput',
+        quickTitle: 'Calculadora Rápida',
+        quickSubtitle: 'Calcular prazos personalizados (días naturais ou hábiles)',
+        quickCalcTitle: 'Calculadora Rápida',
+        quickCalcDescription: 'Introduce manualmente o número de días o tipo de cómputo. O sistema terán en conta o calendario de festivos de Lugo (nacionais, autonómicos e locais).',
+        quickCalcDays: 'Número de días',
+        quickCalcType: 'Tipo de cómputo',
         quickCalcTypeHelp: {
-            habiles: 'S\'exclouen dissabtes, diumenges i festius del còmput',
-            naturales: 'Si l\'últim dia és inhàbil, es prorroga al següent hàbil'
+            habiles: 'Exclúense sábados, domingos e festivos do cómputo',
+            naturales: 'Se o último día é inhábil, prorrógase ao seguinte hábil'
         },
-        quickCalcStartDate: 'Data d\'inici',
-        quickCalcNotificationDate: 'Data de publicació/notificació',
-        daysInputLabel: 'Nombre de dies',
-        dayTypeLabel: 'Tipus de dies',
-        naturalDays: 'Dies naturals',
-        businessDays: 'Dies hàbils',
-        quickDateLabel: 'Data d\'inici',
-        quickDateHelp: 'El còmput començarà des d\'aquesta data',
+        quickCalcStartDate: 'Data de inicio',
+        quickCalcNotificationDate: 'Data de publicación/notificación',
+        daysInputLabel: 'Número de días',
+        dayTypeLabel: 'Tipo de días',
+        naturalDays: 'Días naturais',
+        businessDays: 'Días hábiles',
+        quickDateLabel: 'Data de inicio',
+        quickDateHelp: 'O cómputo comezará desde esta data',
 
         // Holiday Calendar
-        holidaysTitle: 'Calendari de Festius',
-        nationalHolidays: 'Festius Nacionals',
-        regionalHolidays: 'Festius Comunitat Valenciana',
-        localHolidays: 'Festius Locals Castelló',
-        holidaysNote: 'Aquests dies són considerats inhàbils per al còmput de terminis',
+        holidaysTitle: 'Calendario de Festivos',
+        nationalHolidays: 'Festivos Nacionais',
+        regionalHolidays: 'Festivos Galicia',
+        localHolidays: 'Festivos Locais Lugo',
+        holidaysNote: 'Estes días son considerados inhábiles para o cómputo de prazos',
 
         // Categories
         categories: {
-            licitacion: 'Licitació',
-            adjudicacion: 'Adjudicació',
-            formalizacion: 'Formalització',
-            ejecucion: 'Execució',
+            licitacion: 'Licitación',
+            adjudicacion: 'Adxudicación',
+            formalizacion: 'Formalización',
+            ejecucion: 'Execución',
             recursos: 'Recursos',
-            especiales: 'Procediments Especials'
+            especiales: 'Procedementos Especiais'
         },
 
         // Footer
-        footerNote: 'Aquesta eina té caràcter orientatiu. Consulteu sempre la normativa vigent i els serveis jurídics competents.',
+        footerNote: 'Esta ferramenta ten un carácter orientativo. Consulte sempre a normativa vixente e os servizos xurídicos competentes.',
 
         // Theme
-        darkMode: 'Mode fosc',
-        lightMode: 'Mode clar',
+        darkMode: 'Modo escuro',
+        lightMode: 'Modo claro',
 
         // Language
         language: 'Idioma'
     }
 } as const;
 
-export type Language = 'es' | 'va';
+export type Language = 'es' | 'gl';
 export type TranslationKey = keyof typeof translations.es;
