@@ -13,7 +13,7 @@
  * - Solo son DÍAS HÁBILES cuando la ley lo indica expresamente
  */
 
-export type DayType = 'naturales' | 'habiles';
+export type DayType = 'naturales' | 'habiles' | 'mesesCivil';
 export type DaysType = 'fixed' | 'minimum' | 'maximum' | 'range';
 export type DeadlineCategory = 'licitacion' | 'adjudicacion' | 'formalizacion' | 'ejecucion' | 'recursos';
 
@@ -41,6 +41,7 @@ export interface Deadline {
     minDays?: number;        // Para 'minimum' o 'range'
     maxDays?: number;        // Para 'maximum' o 'range'
     defaultDays?: number;    // Valor por defecto en input
+    months?: number;         // Para cómputo civil (mesesCivil) - fecha a fecha
 
     // Reducciones aplicables
     reductions?: DeadlineReduction[];
@@ -212,27 +213,27 @@ export const DEADLINES_LICITACION: Deadline[] = [
     },
     {
         id: 'super-simplificado',
-        name: 'Súper-Simplificado',
+        name: 'Simplificado abreviado',
         daysType: 'minimum',
         minDays: 10,
         defaultDays: 10,
         dayType: 'habiles',
-        article: 'Art. 159.6 LCSP',
-        description: 'Tramitación súper-simplificada (< 80k€ obras / < 60k€ otros)',
+        article: 'Art. 159.4 LCSP',
+        description: 'Procedimiento abierto simplificado abreviado (mínimo 10 días hábiles)',
         alert: '🔥 Días HÁBILES (mínimo 10)',
         category: 'licitacion',
         subcategory: 'Simplificado'
     },
     {
         id: 'super-simplificado-corriente',
-        name: 'Súper-Simplificado (Bienes corrientes)',
+        name: 'Simplificado superabreviado',
         daysType: 'minimum',
         minDays: 5,
         defaultDays: 5,
         dayType: 'habiles',
-        article: 'Art. 159.6.a LCSP',
-        description: 'Compras corrientes de bienes disponibles en el mercado',
-        alert: '🔥 Plazo crítico - Días HÁBILES (mínimo 5)',
+        article: 'Art. 159.4 LCSP',
+        description: 'Procedimiento abierto simplificado superabreviado (5 días hábiles). Modalidad muy excepcional.',
+        alert: '🔥 Plazo crítico - Días HÁBILES (mínimo 5). Modalidad muy excepcional.',
         category: 'licitacion',
         subcategory: 'Simplificado'
     },
@@ -318,9 +319,9 @@ export const DEADLINES_LICITACION: Deadline[] = [
 export const DEADLINES_ADJUDICACION: Deadline[] = [
     {
         id: 'aportacion-documentacion',
-        name: 'Aportación documentación adjudicatario',
+        name: 'Requerimiento de documentación al propuesto adjudicatario',
         daysType: 'fixed',
-        days: 10,
+        days: 7,
         dayType: 'habiles',
         article: 'Art. 150.2 LCSP',
         description: 'Plazo para aportar documentación y garantía tras propuesta de adjudicación',
@@ -350,13 +351,13 @@ export const DEADLINES_ADJUDICACION: Deadline[] = [
     },
     {
         id: 'adjudicacion-simplificado',
-        name: 'Adjudicación tras garantía (Simplificado)',
+        name: 'Adjudicación tras recepción documentación',
         daysType: 'maximum',
         maxDays: 5,
         defaultDays: 5,
-        dayType: 'naturales',
-        article: 'Art. 159.4 LCSP',
-        description: 'Plazo máximo para adjudicar tras constituir garantía en simplificado',
+        dayType: 'habiles',
+        article: 'Art. 150.4 LCSP',
+        description: 'Plazo máximo para adjudicar tras recibir documentación del propuesto adjudicatario',
         category: 'adjudicacion',
         subcategory: 'Simplificado'
     },
@@ -375,12 +376,11 @@ export const DEADLINES_ADJUDICACION: Deadline[] = [
         id: 'adjudicacion-varios-criterios',
         name: 'Adjudicación (varios criterios)',
         daysType: 'maximum',
-        maxDays: 60,
-        defaultDays: 60,
-        dayType: 'naturales',
+        months: 2,
+        dayType: 'mesesCivil',
         article: 'Art. 158 LCSP',
-        description: 'Plazo máximo adjudicación con varios criterios (2 meses)',
-        alert: '⏳ Se amplía 15 días hábiles si hay ofertas anormales',
+        description: 'Plazo máximo adjudicación con varios criterios (2 meses, cómputo civil fecha a fecha)',
+        alert: '⏳ 2 meses civiles (fecha a fecha). Se amplía 15 días hábiles si hay ofertas anormales.',
         category: 'adjudicacion'
     },
     {
@@ -509,13 +509,13 @@ export const DEADLINES_FORMALIZACION: Deadline[] = [
     },
     {
         id: 'requerimiento-formalizacion',
-        name: 'Requerimiento para formalizar',
+        name: 'Plazo para formalizar tras standstill',
         daysType: 'maximum',
         maxDays: 5,
         defaultDays: 5,
-        dayType: 'naturales',
+        dayType: 'habiles',
         article: 'Art. 153.3 LCSP',
-        description: 'Plazo máximo para requerir formalización tras standstill',
+        description: 'Plazo máximo para formalizar el contrato una vez transcurrido el periodo standstill',
         category: 'formalizacion'
     },
     {
@@ -885,15 +885,30 @@ export const DEADLINES_RECURSOS: Deadline[] = [
         subcategory: 'Vía judicial'
     },
 
+    // --- RECURSO DE ALZADA (Ley 39/2015) ---
+    {
+        id: 'recurso-alzada',
+        name: 'Recurso de alzada',
+        daysType: 'fixed',
+        months: 1,
+        dayType: 'mesesCivil',
+        article: 'Art. 121 LPACAP (supletoria)',
+        description: 'Plazo para interponer recurso de alzada: 1 mes civil (fecha a fecha). Si el último día es inhábil, se traslada al siguiente hábil.',
+        alert: '⚠️ Cómputo civil: fecha a fecha. Solo ajuste si último día es inhábil.',
+        category: 'recursos',
+        subcategory: 'Otros recursos'
+    },
+
     // --- RECURSO DE REPOSICIÓN (Ley 39/2015) ---
     {
         id: 'recurso-reposicion',
-        name: 'Recurso potestativo de reposición',
+        name: 'Recurso de reposición',
         daysType: 'fixed',
-        days: 30,
-        dayType: 'naturales',
-        article: 'Art. 124 Ley 39/2015',
-        description: 'Plazo para interponer recurso de reposición (actos no susceptibles de REMC)',
+        months: 1,
+        dayType: 'mesesCivil',
+        article: 'Art. 123 LPACAP (supletoria)',
+        description: 'Plazo para interponer recurso de reposición: 1 mes civil (fecha a fecha). Si el último día es inhábil, se traslada al siguiente hábil.',
+        alert: '⚠️ Cómputo civil: fecha a fecha. Solo ajuste si último día es inhábil.',
         category: 'recursos',
         subcategory: 'Otros recursos'
     },
@@ -979,12 +994,17 @@ export const DEADLINE_CATEGORIES = {
 } as const;
 
 /**
- * Calcula los días efectivos aplicando reducciones
+ * Calcula los días/meses efectivos aplicando reducciones.
+ * Para plazos mesesCivil devuelve el número de meses.
  */
 export function calculateEffectiveDays(
     deadline: Deadline,
     appliedReductions: string[] = []
 ): number {
+    // Para cómputo civil, devolvemos los meses directamente
+    if (deadline.dayType === 'mesesCivil') {
+        return deadline.months ?? 1;
+    }
     let baseDays = deadline.days ?? deadline.defaultDays ?? deadline.minDays ?? 0;
 
     if (deadline.reductions) {
