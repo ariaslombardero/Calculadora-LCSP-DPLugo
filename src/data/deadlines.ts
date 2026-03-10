@@ -503,7 +503,7 @@ export const DEADLINES_FORMALIZACION: Deadline[] = [
         days: 15,
         dayType: 'habiles',
         article: 'Art. 153.3 LCSP',
-        description: 'Durante este período la Administración no puede firmar el contrato. El plazo garantiza que los licitadores no seleccionados puedan interponer Recurso Especial en Materia de Contratación (REMC) si consideran incorrecta la adjudicación. Solo una vez transcurrido este período de espera sin que se haya interpuesto recurso, o resuelto este, podrá procederse a la formalización (Art. 153.3 LCSP).'
+        description: 'Durante este período la Administración no puede firmar el contrato. El plazo garantiza que los licitadores no seleccionados puedan interponer Recurso Especial en Materia de Contratación (REMC) si consideran incorrecta la adjudicación. Solo una vez transcurrido este período de espera sin que se haya interpuesto recurso, o resuelto este, podrá procederse a la formalización (Art. 153.3 LCSP).',
         alert: '⏸️ Suspende la formalización',
         category: 'formalizacion'
     },
