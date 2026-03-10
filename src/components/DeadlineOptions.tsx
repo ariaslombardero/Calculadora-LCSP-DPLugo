@@ -24,18 +24,25 @@ export function DeadlineOptions({ deadline, onDaysChange, onReductionsChange }: 
     const { isDark } = useTheme();
 
     const [customDays, setCustomDays] = useState<number>(
-        deadline.days ?? deadline.defaultDays ?? deadline.minDays ?? 0
+        deadline.dayType === 'fechaAFecha'
+            ? (deadline.months ?? 1)
+            : (deadline.days ?? deadline.defaultDays ?? deadline.minDays ?? 0)
     );
     const [appliedReductions, setAppliedReductions] = useState<string[]>([]);
     const [validationError, setValidationError] = useState<string | null>(null);
 
     const getDaysTypeText = (type: string) => {
-        return type === 'habiles' ? t('daysType.habiles') : t('daysType.naturales');
+        if (type === 'habiles') return t('daysType.habiles');
+        if (type === 'fechaAFecha') return t('daysType.fechaAFecha');
+        return t('daysType.naturales');
     };
 
     // Actualizar cuando cambia el deadline
     useEffect(() => {
-        const defaultValue = deadline.days ?? deadline.defaultDays ?? deadline.minDays ?? 0;
+        // Para plazos fecha a fecha, usamos los meses como valor efectivo
+        const defaultValue = deadline.dayType === 'fechaAFecha'
+            ? (deadline.months ?? 1)
+            : (deadline.days ?? deadline.defaultDays ?? deadline.minDays ?? 0);
         setCustomDays(defaultValue);
         setAppliedReductions([]);
         setValidationError(null);

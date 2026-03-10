@@ -415,10 +415,10 @@ export function QuickCalculator() {
                                 <span className="w-2 h-2 rounded-full bg-red-500" /> Nacional
                             </span>
                             <span className="flex items-center gap-1">
-                                <span className="w-2 h-2 rounded-full bg-orange-500" /> {language === 'va' ? 'Com. Valenciana' : 'Com. Valenciana'}
+                                <span className="w-2 h-2 rounded-full bg-orange-500" /> 'Galicia'
                             </span>
                             <span className="flex items-center gap-1">
-                                <span className="w-2 h-2 rounded-full bg-blue-500" /> {language === 'va' ? 'Castelló (local)' : 'Castellón (local)'}
+                                <span className="w-2 h-2 rounded-full bg-blue-500" /> 'Lugo (local)'
                             </span>
                         </div>
                     </div>
