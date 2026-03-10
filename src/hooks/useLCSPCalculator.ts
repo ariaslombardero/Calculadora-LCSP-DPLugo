@@ -9,7 +9,7 @@
  */
 
 import { useState } from 'react';
-import { addDays, isWeekend, differenceInCalendarDays, format } from 'date-fns';
+import { addDays, addMonths, isWeekend, differenceInCalendarDays, format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Deadline, DayType } from '../data/deadlines';
 import { isHoliday, getHolidaysInRange, Holiday } from '../data/holidays';
@@ -88,6 +88,29 @@ function calculateWorkingDays(startDate: Date, days: number): Date {
 }
 
 /**
+ * Calcula la fecha de vencimiento en meses civiles (cómputo civil)
+ * Fecha a fecha: mismo día del mes siguiente(s)
+ * Si el último día es inhábil, se prorroga al siguiente hábil
+ */
+function calculateCivilMonths(startDate: Date, months: number): Date {
+    // Dies a Quo: el plazo comienza el día siguiente
+    const computeStart = addDays(startDate, 1);
+
+    // Cómputo civil: fecha a fecha (mismo día del mes correspondiente)
+    let endDate = addMonths(computeStart, months);
+    // Retrocedemos 1 día para respetar la lógica fecha a fecha desde dies a quo
+    endDate = addDays(endDate, -1);
+
+    // Si el último día es inhábil, prorrogamos al siguiente hábil
+    while (isNonWorkingDay(endDate)) {
+        endDate = addDays(endDate, 1);
+    }
+
+    return endDate;
+}
+
+
+/**
  * Hook principal para calcular plazos LCSP
  */
 export function useLCSPCalculator() {
@@ -112,6 +135,9 @@ export function useLCSPCalculator() {
 
             if (deadline.dayType === 'habiles') {
                 endDate = calculateWorkingDays(startDate, effectiveDays);
+            } else if (deadline.dayType === 'mesesCivil') {
+                const months = deadline.months ?? Math.round(effectiveDays / 30);
+                endDate = calculateCivilMonths(startDate, months);
             } else {
                 endDate = calculateNaturalDays(startDate, effectiveDays);
             }
