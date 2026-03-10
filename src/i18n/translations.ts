@@ -226,3 +226,9 @@ export const translations = {
 
 export type Language = 'es' | 'gl' | 'va';
 export type TranslationKey = keyof typeof translations.es;
+
+// Mapa de idiomas: 'va' redirige a 'es' (legado de versión anterior)
+export const translationsMap = {
+    ...translations,
+    va: translations.es
+};
