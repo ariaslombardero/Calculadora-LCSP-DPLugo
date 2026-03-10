@@ -13,7 +13,7 @@
  * - Solo son DÍAS HÁBILES cuando la ley lo indica expresamente
  */
 
-export type DayType = 'naturales' | 'habiles' | 'mesesCivil';
+export type DayType = 'naturales' | 'habiles' | 'fechaAFecha';
 export type DaysType = 'fixed' | 'minimum' | 'maximum' | 'range';
 export type DeadlineCategory = 'licitacion' | 'adjudicacion' | 'formalizacion' | 'ejecucion' | 'recursos';
 
@@ -377,10 +377,10 @@ export const DEADLINES_ADJUDICACION: Deadline[] = [
         name: 'Adjudicación (varios criterios)',
         daysType: 'maximum',
         months: 2,
-        dayType: 'mesesCivil',
+        dayType: 'fechaAFecha',
         article: 'Art. 158 LCSP',
         description: 'Plazo máximo adjudicación con varios criterios (2 meses, cómputo civil fecha a fecha)',
-        alert: '⏳ 2 meses civiles (fecha a fecha). Se amplía 15 días hábiles si hay ofertas anormales.',
+        alert: '⚠ Plazo de 2 meses computado de fecha a fecha (Art. 29 LCSP y Art. 30.4 Ley 39/2015): el vencimiento cae el mismo día numérico del 2.º mes siguiente al del inicio del cómputo. Si ese día no existe en el mes de destino, se toma el último día de dicho mes. Si el día de vencimiento es inhábil, se prorroga al siguiente día hábil (Art. 30.5 Ley 39/2015). Se amplía en 15 días hábiles adicionales si hay ofertas en valores anormales o desproporcionados.',
         category: 'adjudicacion'
     },
     {
@@ -498,24 +498,24 @@ export const DEADLINES_ADJUDICACION: Deadline[] = [
 export const DEADLINES_FORMALIZACION: Deadline[] = [
     {
         id: 'standstill',
-        name: 'Formalización (susceptible de REMC)',
+        name: 'Período de espera antes de formalizar – contratos con REMC',
         daysType: 'fixed',
         days: 15,
         dayType: 'habiles',
         article: 'Art. 153.3 LCSP',
-        description: 'Plazo de espera antes de formalizar (contratos susceptibles de REMC)',
+        description: 'Durante este período la Administración no puede firmar el contrato. El plazo garantiza que los licitadores no seleccionados puedan interponer Recurso Especial en Materia de Contratación (REMC) si consideran incorrecta la adjudicación. Solo una vez transcurrido este período de espera sin que se haya interpuesto recurso, o resuelto este, podrá procederse a la formalización (Art. 153.3 LCSP).'
         alert: '⏸️ Suspende la formalización',
         category: 'formalizacion'
     },
     {
         id: 'requerimiento-formalizacion',
-        name: 'Plazo para formalizar tras standstill',
+        name: 'Plazo para firmar el contrato tras el período de espera',
         daysType: 'maximum',
         maxDays: 5,
         defaultDays: 5,
         dayType: 'habiles',
         article: 'Art. 153.3 LCSP',
-        description: 'Plazo máximo para formalizar el contrato una vez transcurrido el periodo standstill',
+        description: 'Plazo máximo para formalizar el contrato una vez transcurrido el período de espera (Art. 153.3 LCSP).',
         category: 'formalizacion'
     },
     {
@@ -791,7 +791,7 @@ export const DEADLINES_RECURSOS: Deadline[] = [
         days: 30,
         dayType: 'naturales',
         article: 'Art. 50.3 LCSP',
-        description: 'Plazo para recurrir por causas de nulidad del Art. 39.2.c/d/e/f (falta publicación, standstill, etc.)',
+        description: 'Plazo para recurrir por causas de nulidad del Art. 39.2.c/d/e/f (falta publicación, período de espera, etc.)',
         alert: '⚠️ Desde publicación formalización o notificación exclusión',
         category: 'recursos',
         subcategory: 'Interposición'
@@ -891,10 +891,10 @@ export const DEADLINES_RECURSOS: Deadline[] = [
         name: 'Recurso de alzada',
         daysType: 'fixed',
         months: 1,
-        dayType: 'mesesCivil',
+        dayType: 'fechaAFecha',
         article: 'Art. 121 LPACAP (supletoria)',
-        description: 'Plazo para interponer recurso de alzada: 1 mes civil (fecha a fecha). Si el último día es inhábil, se traslada al siguiente hábil.',
-        alert: '⚠️ Cómputo civil: fecha a fecha. Solo ajuste si último día es inhábil.',
+        description: 'Plazo de 1 mes computado de fecha a fecha (Art. 30.4 Ley 39/2015, supletoria): el vencimiento cae el mismo día numérico del mes siguiente al del inicio del cómputo.',
+        alert: '⚠ Plazo de 1 mes computado de fecha a fecha (Art. 30.4 Ley 39/2015, supletoria): el vencimiento cae el mismo día numérico del mes siguiente al del inicio del cómputo. Si ese día no existe en el mes de destino, se toma el último día de dicho mes. Si el día de vencimiento es inhábil, se prorroga al siguiente día hábil (Art. 30.5 Ley 39/2015).',
         category: 'recursos',
         subcategory: 'Otros recursos'
     },
@@ -905,10 +905,10 @@ export const DEADLINES_RECURSOS: Deadline[] = [
         name: 'Recurso de reposición',
         daysType: 'fixed',
         months: 1,
-        dayType: 'mesesCivil',
+        dayType: 'fechaAFecha',
         article: 'Art. 123 LPACAP (supletoria)',
-        description: 'Plazo para interponer recurso de reposición: 1 mes civil (fecha a fecha). Si el último día es inhábil, se traslada al siguiente hábil.',
-        alert: '⚠️ Cómputo civil: fecha a fecha. Solo ajuste si último día es inhábil.',
+        description: 'Plazo de 1 mes computado de fecha a fecha (Art. 30.4 Ley 39/2015, supletoria): el vencimiento cae el mismo día numérico del mes siguiente al del inicio del cómputo.',
+        alert: '⚠ Plazo de 1 mes computado de fecha a fecha (Art. 30.4 Ley 39/2015, supletoria): el vencimiento cae el mismo día numérico del mes siguiente al del inicio del cómputo. Si ese día no existe en el mes de destino, se toma el último día de dicho mes. Si el día de vencimiento es inhábil, se prorroga al siguiente día hábil (Art. 30.5 Ley 39/2015).',
         category: 'recursos',
         subcategory: 'Otros recursos'
     },
@@ -1002,7 +1002,7 @@ export function calculateEffectiveDays(
     appliedReductions: string[] = []
 ): number {
     // Para cómputo civil, devolvemos los meses directamente
-    if (deadline.dayType === 'mesesCivil') {
+    if (deadline.dayType === 'fechaAFecha') {
         return deadline.months ?? 1;
     }
     let baseDays = deadline.days ?? deadline.defaultDays ?? deadline.minDays ?? 0;
