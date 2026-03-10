@@ -5,7 +5,7 @@
  * - Dies a Quo: El plazo comienza el día siguiente a la publicación/notificación
  * - Días hábiles: Excluye sábados, domingos y festivos
  * - Días naturales: Si el último día es inhábil, se prorroga al siguiente hábil
- * - Festivos: Nacionales, Comunidad Valenciana y Castellón (locales)
+ * - Festivos: Nacionales, Galicia y Lugo (locales)
  */
 
 import { useState } from 'react';
@@ -88,20 +88,22 @@ function calculateWorkingDays(startDate: Date, days: number): Date {
 }
 
 /**
- * Calcula la fecha de vencimiento en meses civiles (cómputo civil)
- * Fecha a fecha: mismo día del mes siguiente(s)
- * Si el último día es inhábil, se prorroga al siguiente hábil
+ * Calcula la fecha de vencimiento para plazos en meses (cómputo fecha a fecha)
+ * Art. 30.4 Ley 39/2015: el vencimiento cae el mismo día numérico del mes de destino.
+ * Art. 30.5 Ley 39/2015: si el último día es inhábil, se prorroga al siguiente hábil.
  */
-function calculateCivilMonths(startDate: Date, months: number): Date {
-    // Dies a Quo: el plazo comienza el día siguiente
+function calculateFechaAFecha(startDate: Date, months: number): Date {
+    // Dies a Quo: el plazo comienza el día siguiente a la notificación
     const computeStart = addDays(startDate, 1);
 
-    // Cómputo civil: fecha a fecha (mismo día del mes correspondiente)
+    // Fecha a fecha: addMonths ya gestiona correctamente fin de mes
+    // (ej: 31 ene + 1 mes = 28/29 feb, no da error)
     let endDate = addMonths(computeStart, months);
-    // Retrocedemos 1 día para respetar la lógica fecha a fecha desde dies a quo
+    // Restamos 1 día: el vencimiento es el mismo día numérico del mes destino,
+    // no el día siguiente (computeStart ya avanzó 1 día por dies a quo)
     endDate = addDays(endDate, -1);
 
-    // Si el último día es inhábil, prorrogamos al siguiente hábil
+    // Si el día de vencimiento es inhábil, prorrogar al siguiente hábil (Art. 30.5 LPACAP)
     while (isNonWorkingDay(endDate)) {
         endDate = addDays(endDate, 1);
     }
@@ -135,9 +137,9 @@ export function useLCSPCalculator() {
 
             if (deadline.dayType === 'habiles') {
                 endDate = calculateWorkingDays(startDate, effectiveDays);
-            } else if (deadline.dayType === 'mesesCivil') {
+            } else if (deadline.dayType === 'fechaAFecha') {
                 const months = deadline.months ?? Math.round(effectiveDays / 30);
-                endDate = calculateCivilMonths(startDate, months);
+                endDate = calculateFechaAFecha(startDate, months);
             } else {
                 endDate = calculateNaturalDays(startDate, effectiveDays);
             }
