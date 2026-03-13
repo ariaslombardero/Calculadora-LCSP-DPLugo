@@ -1,4 +1,4 @@
-# 📅 Calculadora LCSP – Diputación Provincial de Lugo
+# 📅 Calculadora LCSP 
 
 Herramienta web para el cálculo automatizado de plazos administrativos establecidos en la **Ley 9/2017, de 8 de noviembre, de Contratos del Sector Público (LCSP)**, adaptada al calendario festivo de **Lugo y la Comunidad Autónoma de Galicia**.
 
@@ -25,7 +25,7 @@ Herramienta web para el cálculo automatizado de plazos administrativos establec
 
 ## Descripción general
 
-Esta aplicación permite a los funcionarios y técnicos de la **Diputación Provincial de Lugo** calcular de forma rápida y precisa las fechas de vencimiento de los diferentes plazos administrativos que marca la LCSP, teniendo en cuenta:
+Esta aplicación permite a empleados públicos de la **Diputación Provincial de Lugo** calcular de forma rápida y precisa las fechas de vencimiento de los diferentes plazos administrativos que marca la LCSP, teniendo en cuenta:
 
 - El modo de cómputo establecido por la ley (días naturales o hábiles).
 - El punto de inicio del plazo (**Dies a Quo**: día siguiente a la notificación o publicación).
@@ -338,4 +338,4 @@ El resultado se genera en la carpeta `/dist`, lista para desplegarse en cualquie
 
 ---
 
-*Desarrollado para la Diputación Provincial de Lugo.*
+*Desarrollado para empleados públicos de la Diputación de Lugo como campo de pruebas. Puede contener errores.*
