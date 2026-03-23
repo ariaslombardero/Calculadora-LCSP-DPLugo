@@ -24,25 +24,18 @@ export function DeadlineOptions({ deadline, onDaysChange, onReductionsChange }: 
     const { isDark } = useTheme();
 
     const [customDays, setCustomDays] = useState<number>(
-        deadline.dayType === 'fechaAFecha'
-            ? (deadline.months ?? 1)
-            : (deadline.days ?? deadline.defaultDays ?? deadline.minDays ?? 0)
+        deadline.days ?? deadline.defaultDays ?? deadline.minDays ?? 0
     );
     const [appliedReductions, setAppliedReductions] = useState<string[]>([]);
     const [validationError, setValidationError] = useState<string | null>(null);
 
     const getDaysTypeText = (type: string) => {
-        if (type === 'habiles') return t('daysType.habiles');
-        if (type === 'fechaAFecha') return t('daysType.fechaAFecha');
-        return t('daysType.naturales');
+        return type === 'habiles' ? t('daysType.habiles') : t('daysType.naturales');
     };
 
     // Actualizar cuando cambia el deadline
     useEffect(() => {
-        // Para plazos fecha a fecha, usamos los meses como valor efectivo
-        const defaultValue = deadline.dayType === 'fechaAFecha'
-            ? (deadline.months ?? 1)
-            : (deadline.days ?? deadline.defaultDays ?? deadline.minDays ?? 0);
+        const defaultValue = deadline.days ?? deadline.defaultDays ?? deadline.minDays ?? 0;
         setCustomDays(defaultValue);
         setAppliedReductions([]);
         setValidationError(null);
@@ -95,11 +88,11 @@ export function DeadlineOptions({ deadline, onDaysChange, onReductionsChange }: 
     };
 
     // Textos traducidos
-    const minLabel = language === 'va' ? 'mínim' : 'mínimo';
-    const maxLabel = language === 'va' ? 'màxim' : 'máximo';
-    const deadlineToApply = language === 'va' ? 'Termini a aplicar:' : 'Plazo a aplicar:';
-    const betweenText = language === 'va' ? 'Termini entre' : 'Plazo entre';
-    const andText = language === 'va' ? 'i' : 'y';
+    const minLabel = language === 'gl' ? 'mínimo' : 'mínimo';
+    const maxLabel = language === 'gl' ? 'máximo' : 'máximo';
+    const deadlineToApply = language === 'gl' ? 'Prazo a aplicar:' : 'Plazo a aplicar:';
+    const betweenText = language === 'gl' ? 'Prazo entre' : 'Plazo entre';
+    const andText = language === 'gl' ? 'e' : 'y';
 
     // Render según tipo de plazo
     const renderDaysTypeInfo = () => {
@@ -118,7 +111,7 @@ export function DeadlineOptions({ deadline, onDaysChange, onReductionsChange }: 
                         <div className={`flex items-center gap-2 text-sm px-3 py-2 rounded-sm ${isDark ? 'bg-amber-900/30 text-amber-300' : 'bg-amber-50 text-amber-700'
                             }`}>
                             <Info className="w-4 h-4" />
-                            <span>{language === 'va' ? 'Termini' : 'Plazo'} <strong>{minLabel}</strong>: {deadline.minDays} {getDaysTypeText(deadline.dayType)}</span>
+                            <span>{language === 'gl' ? 'Prazo' : 'Plazo'} <strong>{minLabel}</strong>: {deadline.minDays} {getDaysTypeText(deadline.dayType)}</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <label className={`text-sm font-medium ${isDark ? 'text-gray-200' : 'text-diputacio-dark'}`}>
@@ -170,7 +163,7 @@ export function DeadlineOptions({ deadline, onDaysChange, onReductionsChange }: 
                         <div className={`flex items-center gap-2 text-sm px-3 py-2 rounded-sm ${isDark ? 'bg-blue-900/30 text-blue-300' : 'bg-blue-50 text-blue-700'
                             }`}>
                             <Info className="w-4 h-4" />
-                            <span>{language === 'va' ? 'Termini' : 'Plazo'} <strong>{maxLabel}</strong>: {deadline.maxDays} {getDaysTypeText(deadline.dayType)}</span>
+                            <span>{language === 'gl' ? 'Prazo' : 'Plazo'} <strong>{maxLabel}</strong>: {deadline.maxDays} {getDaysTypeText(deadline.dayType)}</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <label className={`text-sm font-medium ${isDark ? 'text-gray-200' : 'text-diputacio-dark'}`}>
@@ -336,7 +329,7 @@ export function DeadlineOptions({ deadline, onDaysChange, onReductionsChange }: 
                                             {reduction.label}
                                         </span>
                                         <span className={`text-xs font-bold ${reduction.days < 0 ? 'text-green-500' : 'text-red-500'}`}>
-                                            {reduction.days > 0 ? '+' : ''}{reduction.days} {language === 'va' ? 'dies' : 'días'}
+                                            {reduction.days > 0 ? '+' : ''}{reduction.days} {language === 'gl' ? 'días' : 'días'}
                                         </span>
                                     </div>
                                     {reduction.condition && (
