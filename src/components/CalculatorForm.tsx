@@ -233,9 +233,9 @@ export function CalculatorForm({ onCalculate }: CalculatorFormProps) {
                         : 'bg-blue-50 border-blue-200'
                     }`}>
                     <p className={`text-sm ${isDark ? 'text-blue-200' : 'text-blue-800'}`}>
-                        <strong>{language === 'gl' ? 'Resumo:' : 'Resumen:'}</strong> {language === 'gl' ? 'Calcular' : 'Calcular'} <strong>{effectiveDays} {getDaysTypeText(selectedDeadline.dayType)}</strong> {language === 'gl' ? 'desde' : 'desde'} {new Date(startDate).toLocaleDateString(language === 'gl' ? 'gl-ES' : 'es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                        <strong>{language === 'gl' ? 'Resum:' : 'Resumen:'}</strong> {language === 'gl' ? 'Calcular' : 'Calcular'} <strong>{effectiveDays} {getDaysTypeText(selectedDeadline.dayType)}</strong> {language === 'gl' ? 'des de' : 'desde'} {new Date(startDate).toLocaleDateString(language === 'gl' ? 'gl-ES' : 'es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                         {appliedReductions.length > 0 && (
-                            <span className={isDark ? 'text-blue-300' : 'text-blue-600'}> ({appliedReductions.length} {language === 'gl' ? 'redución(s) aplicada(s)' : 'reducción(es) aplicada(s)'})</span>
+                            <span className={isDark ? 'text-blue-300' : 'text-blue-600'}> ({appliedReductions.length} {language === 'gl' ? 'reducció(ns) aplicada(es)' : 'reducción(es) aplicada(s)'})</span>
                         )}
                     </p>
                 </div>
@@ -256,4 +256,3 @@ export function CalculatorForm({ onCalculate }: CalculatorFormProps) {
         </form>
     );
 }
-

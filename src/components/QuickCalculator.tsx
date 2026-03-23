@@ -1,317 +1,450 @@
-import React, { useState } from 'react';
-import { Calendar, Calculator, FileText, AlertTriangle, ArrowRight, CheckCircle, Clock } from 'lucide-react';
-import { useLCSPCalculator } from '../hooks/useLCSPCalculator';
+/**
+ * QuickCalculator - Calculadora rápida/manual
+ * Permite al usuario introducir directamente el número de días
+ */
+
+import { useState } from 'react';
+import { Calendar, Calculator, Info, CalendarDays, AlertCircle } from 'lucide-react';
+import { addDays, isWeekend, format, differenceInCalendarDays } from 'date-fns';
+import { es, gl } from 'date-fns/locale';
+import { isHoliday, getHolidaysInRange, Holiday } from '../data/holidays';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 
-export const QuickCalculator: React.FC = () => {
-  const { t, language } = useLanguage();
-  const { isDark } = useTheme();
-  const [days, setDays] = useState<number>(15);
-  const [dayType, setDayType] = useState<'naturales' | 'habiles'>('naturales');
-  const [startDate, setStartDate] = useState<string>(new Date().toISOString().split('T')[0]);
-  const [hasCalculated, setHasCalculated] = useState(false);
+type DayType = 'naturales' | 'habiles';
 
-  // Hook de cálculo
-  const { result, calculateCustom } = useLCSPCalculator();
+interface QuickResult {
+    startDate: Date;
+    endDate: Date;
+    days: number;
+    dayType: DayType;
+    holidaysInPeriod: Holiday[];
+    daysRemaining: number;
+    isOverdue: boolean;
+}
 
-  const handleCalculate = (e: React.FormEvent) => {
-    e.preventDefault();
-    calculateCustom(new Date(startDate), days, dayType);
-    setHasCalculated(true);
-  };
+/**
+ * Comprueba si un día es inhábil (fin de semana o festivo)
+ */
+function isNonWorkingDay(date: Date): boolean {
+    return isWeekend(date) || isHoliday(date);
+}
 
-  const incrementDays = () => setDays(prev => prev + 1);
-  const decrementDays = () => setDays(prev => Math.max(1, prev - 1));
+/**
+ * Calcula fecha con días naturales
+ */
+function calculateNaturalDays(startDate: Date, days: number): Date {
+    const computeStart = addDays(startDate, 1);
+    let endDate = addDays(computeStart, days - 1);
 
-  // Títulos traducidos según idioma
-  const resultTitle = language === 'gl' ? 'Resultado do cálculo' : 'Resultado del cálculo';
-  const diesAQuoTitle = language === 'gl' ? '1. Inicio (Dies a Quo)' : '1. Inicio (Dies a Quo)';
-  const computationTitle = language === 'gl' ? '2. Cómputo' : '2. Cómputo';
-  const termTitle = language === 'gl' ? '3. Vencemento' : '3. Vencimiento';
-  const diesAQuoDesc = language === 'gl' 
-    ? 'O prazo comeza o día seguinte á notificación.' 
-    : 'El plazo comienza el día siguiente a la notificación.';
-  const computationDesc = dayType === 'naturales'
-    ? (language === 'gl' ? 'Cóntanse todos os días (incluídos fins de semana e festivos).' : 'Se cuentan todos los días (incluidos fines de semana y festivos).')
-    : (language === 'gl' ? 'Exclúense sábados, domingos e festivos.' : 'Se excluyen sábados, domingos y festivos.');
-  const naturalExtDesc = language === 'gl' 
-    ? 'Se o último día é inhábil, prorrógase ao primeiro día hábil seguinte.'
-    : 'Si el último día es inhábil, se prorroga al primer día hábil siguiente.';
-  const effectiveTerm = language === 'gl' ? 'Vencemento efectivo' : 'Vencimiento efectivo';
-  const daysIncluded = language === 'gl' ? 'Días totais transcorridos' : 'Días totales transcurridos';
+    while (isNonWorkingDay(endDate)) {
+        endDate = addDays(endDate, 1);
+    }
 
-  return (
-    <div className="space-y-8 animate-fade-in">
-      {/* Header */}
-      <div className={`p-6 rounded-lg border ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-diputacio-light shadow-sm'}`}>
-        <div className="flex items-center gap-3 mb-2">
-          <div className="p-2 bg-diputacio-red/10 rounded-lg">
-            <Calculator className="w-6 h-6 text-diputacio-red" />
-          </div>
-          <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-diputacio-dark'}`}>
-            {t('quickCalcTitle')}
-          </h2>
-        </div>
-        <p className={isDark ? 'text-gray-400' : 'text-diputacio-muted'}>
-          {t('quickCalcDescription')}
-        </p>
-      </div>
+    return endDate;
+}
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Formulario */}
-        <div className="lg:col-span-5 space-y-6">
-          <form onSubmit={handleCalculate} className={`p-6 border rounded-lg ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white shadow-sm'}`}>
-            <h3 className={`text-lg font-semibold mb-6 flex items-center gap-2 ${isDark ? 'text-gray-200' : 'text-diputacio-dark'}`}>
-              <FileText className="w-5 h-5 text-diputacio-red" />
-              {language === 'gl' ? 'Parámetros do  prazo' : 'Parámetros del plazo'}
-            </h3>
+/**
+ * Calcula fecha con días hábiles
+ */
+function calculateWorkingDays(startDate: Date, days: number): Date {
+    let currentDate = addDays(startDate, 1);
+    let daysCount = 0;
 
-            {/* Fecha inicio */}
-            <div className="space-y-3 mb-6">
-              <label className={`block text-sm font-semibold uppercase tracking-wide ${isDark ? 'text-gray-300' : 'text-diputacio-dark'}`}>
-                {t('quickCalcNotificationDate')}
-              </label>
-              <div className="relative">
-                <input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-diputacio-red transition-all ${
-                    isDark ? 'bg-gray-900 border-gray-600 text-white' : 'bg-gray-50 border-gray-300'
-                  }`}
-                  required
-                />
-                <Calendar className={`absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
-              </div>
-            </div>
+    while (daysCount < days) {
+        if (!isNonWorkingDay(currentDate)) {
+            daysCount++;
+        }
+        if (daysCount < days) {
+            currentDate = addDays(currentDate, 1);
+        }
+    }
 
-            {/* Número de días */}
-            <div className="space-y-3 mb-6">
-              <label className={`block text-sm font-semibold uppercase tracking-wide ${isDark ? 'text-gray-300' : 'text-diputacio-dark'}`}>
-                {t('quickCalcDays')}
-              </label>
-              <div className="flex">
-                <button
-                  type="button"
-                  onClick={decrementDays}
-                  className={`px-4 py-3 border rounded-l-lg transition-colors ${
-                    isDark ? 'bg-gray-700 border-gray-600 hover:bg-gray-600' : 'bg-gray-100 border-gray-300 hover:bg-gray-200'
-                  }`}
-                >
-                  -
-                </button>
-                <input
-                  type="number"
-                  min="1"
-                  value={days}
-                  onChange={(e) => setDays(Math.max(1, parseInt(e.target.value) || 1))}
-                  className={`w-full px-4 py-3 border-y text-center font-bold text-lg focus:outline-none focus:ring-2 focus:ring-diputacio-red transition-all ${
-                    isDark ? 'bg-gray-900 border-gray-600 text-white' : 'bg-white border-gray-300'
-                  }`}
-                />
-                <button
-                  type="button"
-                  onClick={incrementDays}
-                  className={`px-4 py-3 border rounded-r-lg transition-colors ${
-                    isDark ? 'bg-gray-700 border-gray-600 hover:bg-gray-600' : 'bg-gray-100 border-gray-300 hover:bg-gray-200'
-                  }`}
-                >
-                  +
-                </button>
-              </div>
-            </div>
+    return currentDate;
+}
 
-            {/* Tipo de días */}
-            <div className="space-y-3 mb-8">
-              <label className={`block text-sm font-semibold uppercase tracking-wide ${isDark ? 'text-gray-300' : 'text-diputacio-dark'}`}>
-                {t('quickCalcType')}
-              </label>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setDayType('naturales')}
-                  className={`py-3 px-4 border rounded-lg font-medium transition-all ${
-                    dayType === 'naturales'
-                      ? 'bg-diputacio-red text-white border-diputacio-red shadow-md'
-                      : isDark ? 'bg-gray-900 border-gray-600 text-gray-300 hover:bg-gray-700' : 'bg-white text-gray-600 hover:bg-gray-50'
-                  }`}
-                >
-                  {t('naturalDays')}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setDayType('habiles')}
-                  className={`py-3 px-4 border rounded-lg font-medium transition-all ${
-                    dayType === 'habiles'
-                      ? 'bg-diputacio-red text-white border-diputacio-red shadow-md'
-                      : isDark ? 'bg-gray-900 border-gray-600 text-gray-300 hover:bg-gray-700' : 'bg-white text-gray-600 hover:bg-gray-50'
-                  }`}
-                >
-                  {t('businessDays')}
-                </button>
-              </div>
-              <p className={`text-xs mt-2 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                {dayType === 'naturales' ? t('quickCalcTypeHelp.naturales') : t('quickCalcTypeHelp.habiles')}
-              </p>
-            </div>
+export function QuickCalculator() {
+    const { t, language } = useLanguage();
+    const { isDark } = useTheme();
 
-            <button
-              type="submit"
-              className="w-full flex items-center justify-center gap-2 py-4 bg-diputacio-dark text-white rounded-lg font-bold uppercase tracking-wide hover:bg-diputacio-red transition-colors shadow-md"
-            >
-              <Calculator className="w-5 h-5" />
-              {t('calculateBtn')}
-            </button>
-          </form>
-        </div>
+    const [days, setDays] = useState<number>(15);
+    const [dayType, setDayType] = useState<DayType>('naturales');
+    const [startDate, setStartDate] = useState<string>(
+        new Date().toISOString().split('T')[0]
+    );
+    const [result, setResult] = useState<QuickResult | null>(null);
 
-        {/* Resultados */}
-        <div className="lg:col-span-7">
-          {hasCalculated && result ? (
-            <div className="space-y-6 animate-slide-up">
-              {/* Tarjeta principal de resultado */}
-              <div className={`p-8 rounded-xl border-2 shadow-lg relative overflow-hidden ${
-                isDark ? 'bg-gray-800 border-diputacio-red' : 'bg-white border-diputacio-red'
-              }`}>
-                {/* Elemento decorativo */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-diputacio-red/5 rounded-bl-full -z-10" />
-                
-                <h3 className={`text-sm font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-red-400' : 'text-diputacio-red'}`}>
-                  {resultTitle}
-                </h3>
-                
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mt-4">
-                  <div>
-                    <p className={`text-sm mb-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{effectiveTerm}</p>
-                    <p className={`text-3xl md:text-4xl font-extrabold capitalize ${isDark ? 'text-white' : 'text-diputacio-dark'}`}>
-                      {result.formattedEndDate}
+    const dateLocale = language === 'gl' ? gl : es;
+    const dateFormat = language === 'gl'
+        ? "EEEE, d MMMM yyyy"
+        : "EEEE, d 'de' MMMM 'de' yyyy";
+
+    const handleCalculate = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        const start = new Date(startDate);
+        let endDate: Date;
+
+        if (dayType === 'habiles') {
+            endDate = calculateWorkingDays(start, days);
+        } else {
+            endDate = calculateNaturalDays(start, days);
+        }
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const daysRemaining = differenceInCalendarDays(endDate, today);
+        const holidaysInPeriod = getHolidaysInRange(start, endDate);
+
+        setResult({
+            startDate: start,
+            endDate,
+            days,
+            dayType,
+            holidaysInPeriod,
+            daysRemaining,
+            isOverdue: daysRemaining < 0,
+        });
+    };
+
+    const handleReset = () => {
+        setResult(null);
+    };
+
+    const getDaysTypeText = (type: string) => {
+        return type === 'habiles' ? t('daysType.habiles') : t('daysType.naturales');
+    };
+
+    const getHolidayTypeLabel = (type: string) => {
+        if (language === 'gl') {
+            return type === 'nacional' ? 'Nacional' :
+                type === 'autonomico' ? 'Autonòmic' : 'Local';
+        }
+        return type === 'nacional' ? 'Nacional' :
+            type === 'autonomico' ? 'Autonómico' : 'Local';
+    };
+
+    return (
+        <div className="space-y-6">
+            {/* Título e info */}
+            <div className={`flex items-start gap-3 border-l-4 p-4 rounded-sm ${isDark
+                    ? 'bg-amber-900/30 border-amber-500'
+                    : 'bg-amber-50 border-amber-500'
+                }`}>
+                <Info className={`w-5 h-5 flex-shrink-0 mt-0.5 ${isDark ? 'text-amber-400' : 'text-amber-600'}`} />
+                <div className={`text-sm ${isDark ? 'text-amber-200' : 'text-amber-800'}`}>
+                    <p className="font-semibold mb-1">{t('quickCalcTitle')}</p>
+                    <p>
+                        {t('quickCalcDescription')}
                     </p>
-                  </div>
-                  
-                  <div className={`px-4 py-2 rounded-lg inline-flex items-center gap-2 font-medium ${
-                    isDark ? 'bg-gray-900 text-gray-300' : 'bg-gray-100 text-gray-700'
-                  }`}>
-                    <Clock className="w-4 h-4" />
-                    {days} {dayType === 'naturales' ? t('naturalDays') : t('businessDays')}
-                  </div>
                 </div>
+            </div>
 
-                {/* Aviso de prórroga */}
-                {result.wasProrrogado && (
-                  <div className={`mt-6 p-4 rounded-lg flex items-start gap-3 ${isDark ? 'bg-amber-900/20 border border-amber-800' : 'bg-amber-50 border border-amber-200'}`}>
-                    <AlertTriangle className={`w-5 h-5 shrink-0 mt-0.5 ${isDark ? 'text-amber-500' : 'text-amber-600'}`} />
-                    <p className={`text-sm ${isDark ? 'text-amber-300' : 'text-amber-800'}`}>
-                      {t('prorrogaNote')}
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              {/* Proceso de cálculo step by step */}
-              <div className={`border rounded-lg p-6 ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white'}`}>
-                <h4 className={`font-semibold mb-6 uppercase tracking-wide text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
-                  {t('calculationDetails')}
-                </h4>
-                
-                <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-300 before:to-transparent">
-                  
-                  {/* Step 1: Inicio */}
-                  <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                    <div className={`flex items-center justify-center w-10 h-10 rounded-full border-4 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-sm ${
-                      isDark ? 'bg-gray-900 border-gray-700 text-gray-400' : 'bg-white border-gray-200 text-gray-500'
-                    }`}>
-                      <Calendar className="w-4 h-4" />
-                    </div>
-                    <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-lg border shadow-sm bg-white dark:bg-gray-800 dark:border-gray-700">
-                      <h5 className="font-bold text-sm text-diputacio-dark dark:text-gray-200 mb-1">{diesAQuoTitle}</h5>
-                      <p className="text-diputacio-red font-medium capitalize mb-2">{result.formattedStartDate}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">{diesAQuoDesc}</p>
-                    </div>
-                  </div>
-                  
-                  {/* Step 2: Recorrido */}
-                  <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                    <div className={`flex items-center justify-center w-10 h-10 rounded-full border-4 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-sm ${
-                      isDark ? 'bg-gray-900 border-gray-700 text-gray-400' : 'bg-white border-gray-200 text-gray-500'
-                    }`}>
-                      <ArrowRight className="w-4 h-4" />
-                    </div>
-                    <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-lg border shadow-sm bg-white dark:bg-gray-800 dark:border-gray-700">
-                      <h5 className="font-bold text-sm text-diputacio-dark dark:text-gray-200 mb-1">{computationTitle}</h5>
-                      <p className="font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        +{days} {dayType === 'naturales' ? t('naturalDays') : t('businessDays')}
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                        {computationDesc}
-                      </p>
-                      {dayType === 'naturales' && (
-                        <p className="text-xs text-gray-500 dark:text-gray-400 italic">
-                          {naturalExtDesc}
-                        </p>
-                      )}
-                      
-                      {/* Mostrar festivos si los hay y afectan o son info útil */}
-                      {result.holidaysInPeriod.length > 0 && (
-                        <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
-                          <p className="text-xs font-semibold mb-2 flex items-center gap-1 dark:text-gray-300">
-                            <AlertTriangle className="w-3 h-3 text-amber-500" />
-                            {result.holidaysInPeriod.length} {language === 'gl' ? 'festivos no período' : 'festivos en el periodo'}
-                          </p>
-                          <div className="max-h-24 overflow-y-auto space-y-1">
-                            {result.holidaysInPeriod.map(h => (
-                              <div key={h.date} className="flex justify-between text-[11px]">
-                                <span className="text-gray-600 dark:text-gray-400 truncate pr-2">{h.name}</span>
-                                <span className="text-gray-400 dark:text-gray-500 flex-shrink-0">{h.date}</span>
-                              </div>
-                            ))}
-                          </div>
+            {!result ? (
+                <form onSubmit={handleCalculate} className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {/* Número de días */}
+                        <div className="space-y-2">
+                            <label
+                                htmlFor="quickDays"
+                                className={`block text-sm font-semibold uppercase tracking-wide ${isDark ? 'text-gray-200' : 'text-diputacio-dark'
+                                    }`}
+                            >
+                                {t('quickCalcDays')}
+                            </label>
+                            <input
+                                type="number"
+                                id="quickDays"
+                                min="1"
+                                max="365"
+                                value={days}
+                                onChange={(e) => setDays(parseInt(e.target.value) || 1)}
+                                className={`w-full px-4 py-3 border rounded-sm
+                           focus:outline-none focus:ring-2 focus:ring-diputacio-red focus:border-transparent
+                           transition-all duration-200 ${isDark
+                                        ? 'bg-gray-700 border-gray-600 text-white'
+                                        : 'bg-white border-gray-300 text-diputacio-dark'
+                                    }`}
+                                required
+                            />
                         </div>
-                      )}
-                    </div>
-                  </div>
-                  
-                  {/* Step 3: Fin */}
-                  <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                    <div className={`flex items-center justify-center w-10 h-10 rounded-full border-4 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-sm ${
-                      isDark ? 'bg-diputacio-red border-gray-800 text-white' : 'bg-diputacio-red border-white text-white'
-                    }`}>
-                      <CheckCircle className="w-5 h-5" />
-                    </div>
-                    <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-lg border shadow-sm border-diputacio-red/30 bg-red-50/30 dark:bg-red-900/10 dark:border-red-900/50">
-                      <h5 className="font-bold text-sm text-diputacio-dark dark:text-gray-200 mb-1">{termTitle}</h5>
-                      <p className="text-diputacio-red font-bold capitalize mb-2">{result.formattedEndDate}</p>
-                      <p className="text-xs font-medium text-gray-600 dark:text-gray-400">
-                        {daysIncluded}: <span className="font-bold">{result.totalDaysElapsed} días</span>
-                      </p>
-                    </div>
-                  </div>
-                  
-                </div>
-              </div>
 
-            </div>
-          ) : (
-            // Estado vacío
-            <div className={`h-full min-h-[400px] flex flex-col items-center justify-center p-8 text-center border-2 border-dashed rounded-xl ${
-              isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
-            }`}>
-              <div className={`p-4 rounded-full mb-4 ${isDark ? 'bg-gray-800' : 'bg-white shadow-sm'}`}>
-                <Calculator className={`w-8 h-8 ${isDark ? 'text-gray-600' : 'text-gray-400'}`} />
-              </div>
-              <h3 className={`font-semibold mb-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                {language === 'gl' ? 'Calculadora lista' : 'Calculadora lista'}
-              </h3>
-              <p className={`text-sm max-w-sm ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
-                {language === 'gl' 
-                  ? 'Configura os parámetros á esquerda e preme calcular para ver o desglose completo do prazo.'
-                  : 'Configura los parámetros a la izquierda y pulsa calcular para ver el desglose completo del plazo.'
-                }
-              </p>
-            </div>
-          )}
+                        {/* Tipo de días */}
+                        <div className="space-y-2">
+                            <label className={`block text-sm font-semibold uppercase tracking-wide ${isDark ? 'text-gray-200' : 'text-diputacio-dark'
+                                }`}>
+                                {t('quickCalcType')}
+                            </label>
+                            <div className="flex gap-4">
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        name="dayType"
+                                        value="naturales"
+                                        checked={dayType === 'naturales'}
+                                        onChange={() => setDayType('naturales')}
+                                        className="w-4 h-4 text-diputacio-red focus:ring-diputacio-red"
+                                    />
+                                    <span className={`text-sm ${isDark ? 'text-gray-200' : 'text-diputacio-dark'}`}>
+                                        {t('daysType.naturales')}
+                                    </span>
+                                </label>
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        name="dayType"
+                                        value="habiles"
+                                        checked={dayType === 'habiles'}
+                                        onChange={() => setDayType('habiles')}
+                                        className="w-4 h-4 text-diputacio-red focus:ring-diputacio-red"
+                                    />
+                                    <span className={`text-sm ${isDark ? 'text-gray-200' : 'text-diputacio-dark'}`}>
+                                        {t('daysType.habiles')}
+                                    </span>
+                                </label>
+                            </div>
+                            <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-diputacio-muted'}`}>
+                                {dayType === 'habiles'
+                                    ? t('quickCalcTypeHelp.habiles')
+                                    : t('quickCalcTypeHelp.naturales')
+                                }
+                            </p>
+                        </div>
+
+                        {/* Fecha de inicio */}
+                        <div className="space-y-2">
+                            <label
+                                htmlFor="quickStartDate"
+                                className={`block text-sm font-semibold uppercase tracking-wide ${isDark ? 'text-gray-200' : 'text-diputacio-dark'
+                                    }`}
+                            >
+                                {t('quickCalcStartDate')}
+                            </label>
+                            <div className="relative">
+                                <input
+                                    type="date"
+                                    id="quickStartDate"
+                                    value={startDate}
+                                    onChange={(e) => setStartDate(e.target.value)}
+                                    className={`w-full px-4 py-3 border rounded-sm
+                             focus:outline-none focus:ring-2 focus:ring-diputacio-red focus:border-transparent
+                             transition-all duration-200 ${isDark
+                                            ? 'bg-gray-700 border-gray-600 text-white'
+                                            : 'bg-white border-gray-300 text-diputacio-dark'
+                                        }`}
+                                    required
+                                />
+                                <Calendar className={`absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none ${isDark ? 'text-gray-400' : 'text-diputacio-muted'
+                                    }`} />
+                            </div>
+                            <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-diputacio-muted'}`}>
+                                {t('dateHelp')}
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Botón calcular */}
+                    <button
+                        type="submit"
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-diputacio-red text-white font-semibold uppercase tracking-wide
+                       rounded-sm cursor-pointer
+                       hover:bg-diputacio-red-dark transition-colors duration-200
+                       focus:outline-none focus:ring-2 focus:ring-diputacio-red focus:ring-offset-2"
+                    >
+                        <Calculator className="w-5 h-5" />
+                        {language === 'gl' ? 'Calcular' : 'Calcular'}
+                    </button>
+                </form>
+            ) : (
+                <div className="space-y-6">
+                    {/* Resultado principal */}
+                    <div className={`p-6 rounded-sm border-l-4 ${result.isOverdue
+                        ? isDark ? 'bg-red-900/30 border-red-600' : 'bg-red-50 border-red-600'
+                        : result.daysRemaining <= 3
+                            ? isDark ? 'bg-yellow-900/30 border-yellow-500' : 'bg-yellow-50 border-yellow-500'
+                            : isDark ? 'bg-green-900/30 border-green-500' : 'bg-green-50 border-green-500'
+                        }`}>
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div>
+                                <p className={`text-sm uppercase tracking-wide font-semibold mb-2 ${isDark ? 'text-gray-400' : 'text-diputacio-muted'
+                                    }`}>
+                                    {t('resultTitle')}
+                                </p>
+                                <p className={`text-2xl font-bold capitalize ${isDark ? 'text-white' : 'text-diputacio-dark'
+                                    }`}>
+                                    {format(result.endDate, dateFormat, { locale: dateLocale })}
+                                </p>
+                                <p className={`text-sm mt-2 ${isDark ? 'text-gray-400' : 'text-diputacio-muted'}`}>
+                                    {result.isOverdue
+                                        ? language === 'gl'
+                                            ? `Va vèncer fa ${Math.abs(result.daysRemaining)} dies`
+                                            : `Venció hace ${Math.abs(result.daysRemaining)} días`
+                                        : result.daysRemaining === 0
+                                            ? language === 'gl' ? 'Venç AVUI' : 'Vence HOY'
+                                            : language === 'gl'
+                                                ? `Queden ${result.daysRemaining} dies`
+                                                : `Quedan ${result.daysRemaining} días`
+                                    }
+                                </p>
+                            </div>
+                            <div className="text-right">
+                                <div className={`inline-block px-4 py-2 rounded-sm border ${isDark
+                                        ? 'bg-gray-800 border-gray-700'
+                                        : 'bg-white border-gray-200'
+                                    }`}>
+                                    <p className={`text-lg font-bold ${isDark ? 'text-white' : 'text-diputacio-dark'}`}>
+                                        {result.days} {getDaysTypeText(result.dayType)}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Detalle del cómputo */}
+                    <div className={`p-6 rounded-sm ${isDark ? 'bg-gray-700' : 'bg-diputacio-gray'}`}>
+                        <h3 className={`text-sm font-semibold uppercase tracking-wide mb-4 ${isDark ? 'text-white' : 'text-diputacio-dark'
+                            }`}>
+                            {t('calculationDetails')}
+                        </h3>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div className="flex items-center gap-3">
+                                <CalendarDays className={`w-5 h-5 ${isDark ? 'text-gray-400' : 'text-diputacio-muted'}`} />
+                                <div>
+                                    <p className={`text-xs uppercase ${isDark ? 'text-gray-400' : 'text-diputacio-muted'}`}>
+                                        {t('quickCalcNotificationDate')}
+                                    </p>
+                                    <p className={`text-sm font-medium capitalize ${isDark ? 'text-white' : 'text-diputacio-dark'
+                                        }`}>
+                                        {format(result.startDate, dateFormat, { locale: dateLocale })}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <Calendar className={`w-5 h-5 ${isDark ? 'text-gray-400' : 'text-diputacio-muted'}`} />
+                                <div>
+                                    <p className={`text-xs uppercase ${isDark ? 'text-gray-400' : 'text-diputacio-muted'}`}>
+                                        {t('resultTitle')}
+                                    </p>
+                                    <p className={`text-sm font-medium capitalize ${isDark ? 'text-white' : 'text-diputacio-dark'
+                                        }`}>
+                                        {format(result.endDate, dateFormat, { locale: dateLocale })}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Festivos en el período */}
+                        <div className={`pt-4 border-t ${isDark ? 'border-gray-600' : 'border-gray-200'}`}>
+                            <p className={`text-xs uppercase mb-3 font-semibold flex items-center gap-2 ${isDark ? 'text-gray-400' : 'text-diputacio-muted'
+                                }`}>
+                                🎌 {t('holidaysInPeriod')}
+                            </p>
+
+                            {result.holidaysInPeriod.length > 0 ? (
+                                <div className="space-y-2">
+                                    {result.holidaysInPeriod.map((holiday) => (
+                                        <div
+                                            key={holiday.date}
+                                            className={`flex items-center justify-between px-3 py-2 rounded-sm border ${isDark
+                                                    ? 'bg-gray-800 border-gray-600'
+                                                    : 'bg-white border-gray-200'
+                                                }`}
+                                        >
+                                            <div className="flex items-center gap-2">
+                                                <span className={`w-2 h-2 rounded-full ${holiday.type === 'nacional' ? 'bg-red-500' :
+                                                    holiday.type === 'autonomico' ? 'bg-orange-500' :
+                                                        'bg-blue-500'
+                                                    }`} />
+                                                <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-diputacio-dark'
+                                                    }`}>
+                                                    {holiday.name}
+                                                </span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-diputacio-muted'}`}>
+                                                    {format(new Date(holiday.date), language === 'gl' ? "d MMMM" : "d 'de' MMMM", { locale: dateLocale })}
+                                                </span>
+                                                <span className={`text-xs px-2 py-0.5 rounded ${holiday.type === 'nacional'
+                                                    ? isDark ? 'bg-red-900/50 text-red-300' : 'bg-red-100 text-red-700'
+                                                    : holiday.type === 'autonomico'
+                                                        ? isDark ? 'bg-orange-900/50 text-orange-300' : 'bg-orange-100 text-orange-700'
+                                                        : isDark ? 'bg-blue-900/50 text-blue-300' : 'bg-blue-100 text-blue-700'
+                                                    }`}>
+                                                    {getHolidayTypeLabel(holiday.type)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ))}
+
+                                    {result.dayType === 'habiles' && (
+                                        <p className={`text-xs mt-2 italic ${isDark ? 'text-gray-400' : 'text-diputacio-muted'}`}>
+                                            <AlertCircle className="w-3 h-3 inline mr-1" />
+                                            {language === 'gl'
+                                                ? "Aquests festius han sigut exclosos del còmput de dies hàbils"
+                                                : 'Estos festivos han sido excluidos del cómputo de días hábiles'
+                                            }
+                                        </p>
+                                    )}
+                                    {result.dayType === 'naturales' && (
+                                        <p className={`text-xs mt-2 italic ${isDark ? 'text-gray-400' : 'text-diputacio-muted'}`}>
+                                            <AlertCircle className="w-3 h-3 inline mr-1" />
+                                            {language === 'gl'
+                                                ? "En dies naturals, els festius compten. Només es prorroga si l'últim dia és inhàbil."
+                                                : 'En días naturales, los festivos cuentan. Solo se prorroga si el último día es inhábil.'
+                                            }
+                                        </p>
+                                    )}
+                                </div>
+                            ) : (
+                                <div className={`px-4 py-3 rounded-sm border text-center ${isDark
+                                        ? 'bg-gray-800 border-gray-600'
+                                        : 'bg-white border-gray-200'
+                                    }`}>
+                                    <p className={`text-sm ${isDark ? 'text-green-400' : 'text-green-700'}`}>
+                                        ✓ {t('noHolidays')}
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Leyenda */}
+                        <div className={`mt-4 pt-4 border-t flex flex-wrap gap-4 text-xs ${isDark ? 'border-gray-600 text-gray-400' : 'border-gray-200 text-diputacio-muted'
+                            }`}>
+                            <span className="flex items-center gap-1">
+                                <span className="w-2 h-2 rounded-full bg-red-500" /> Nacional
+                            </span>
+                            <span className="flex items-center gap-1">
+                                <span className="w-2 h-2 rounded-full bg-orange-500" /> {language === 'gl' ? 'Com. Valenciana' : 'Com. Valenciana'}
+                            </span>
+                            <span className="flex items-center gap-1">
+                                <span className="w-2 h-2 rounded-full bg-blue-500" /> {language === 'gl' ? 'Castelló (local)' : 'Castellón (local)'}
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Nota legal */}
+                    <p className={`text-xs italic ${isDark ? 'text-gray-400' : 'text-diputacio-muted'}`}>
+                        {language === 'gl'
+                            ? "Nota: El còmput comença el dia següent a la data de publicació/notificació (Dies a Quo, Llei 39/2015)."
+                            : "Nota: El cómputo comienza el día siguiente a la fecha de publicación/notificación (Dies a Quo, Ley 39/2015)."
+                        }
+                    </p>
+
+                    {/* Botón nuevo cálculo */}
+                    <button
+                        onClick={handleReset}
+                        className={`inline-flex items-center gap-2 px-4 py-2 border font-semibold uppercase text-sm
+                       rounded-sm cursor-pointer transition-colors duration-200
+                       focus:outline-none focus:ring-2 focus:ring-diputacio-red focus:ring-offset-2 ${isDark
+                                ? 'border-gray-600 text-gray-200 hover:bg-gray-700'
+                                : 'border-gray-300 text-diputacio-dark hover:bg-diputacio-gray'
+                            }`}
+                    >
+                        {t('resetBtn')}
+                    </button>
+                </div>
+            )}
         </div>
-      </div>
-    </div>
-  );
-};
+    );
+}
