@@ -1,4 +1,11 @@
-# 📅 Calculadora LCSP – Diputación Provincial de Lugo
+# 📅 Calculadora de plazos LCSP – Lugo
+
+![alt text](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB)
+![alt text](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![alt text](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)
+![alt text](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)
+![alt text](https://img.shields.io/badge/Estado-activo-28a745?style=flat-square)
+![alt text](https://img.shields.io/badge/Licencia-MIT-yellow?style=flat-square)
 
 <img src="./thumbnail.png" alt="Calculadora LCSP Lugo — captura de pantalla principal" width="100%" style="border-radius:8px;" />
 
@@ -19,9 +26,11 @@
 
 > **Nota:** Este proyecto demuestra la viabilidad de crear plataformas digitales de alta complejidad técnica y visual utilizando exclusivamente metodologías de **Vibe Coding** (Inteligencia Artificial Generativa), acelerando radicalmente el ciclo de desarrollo desde la idea al despliegue.
 
-## Descripción detallada
+## 📖 Descripción detallada
 
-Esta aplicación permitirá a los empleados públicos de la **Diputación Provincial de Lugo** calcular de forma rápida y precisa las fechas de vencimiento de los diferentes plazos administrativos que marca la LCSP, teniendo en cuenta el modo de cómputo en días hábiles/naturales, el inicio ("Dies a Quo"), la prórroga automática y el calendario de festivos aplicable en la región. 
+Esta aplicación está pensada para que los órganos de contratación que operen en la ciudad de Lugo puedan calcular de forma rápida y precisa las fechas de vencimiento de los diferentes plazos administrativos que marca la LCSP, teniendo en cuenta el modo de cómputo en días hábiles/naturales, el inicio ("Dies a Quo"), la prórroga automática y el calendario de festivos aplicable en la región. 
+
+> 🏛️ Está previsto que esta aplicación forme parte del conjunto de herramientas tecnológicas de [**MencIA**](https://github.com/ariaslombardero/Landing-MencIA), la estrategia de Inteligencia Artificial de la Diputación de Lugo.
 
 > [!NOTE]
 > **Aviso de precisión:** Esta aplicación es un recurso diseñado con fines demostrativos y/o educativos que actualmente se encuentra en período de prueba. Su estructura y contenido han sido desarrollados mediante metodologías de **Vibe Coding** (IA Generativa), por lo que es posible que existan omisiones o errores en la aplicación y cálculo de algún plazo. Si detectas cualquier error o área de mejora, te agradecería que me lo comunicaras para proceder a su análisis y subsanación.
