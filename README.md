@@ -1,6 +1,6 @@
 # 📅 Calculadora LCSP – Diputación Provincial de Lugo
 
-![Thumbnail del proyecto](./public/logo-diputacio.png)
+<img src="./thumbnail.png" alt="Calculadora LCSP Lugo — captura de pantalla principal" width="100%" style="border-radius:8px;" />
 
 **Herramienta web para el cálculo automatizado de plazos administrativos establecidos en la Ley 9/2017, de 8 de noviembre, de Contratos del Sector Público (LCSP), adaptada al calendario festivo de Lugo y la Comunidad Autónoma de Galicia.**
 
@@ -21,12 +21,12 @@
 
 ## Descripción detallada
 
-Esta aplicación permite a los funcionarios y técnicos de la **Diputación Provincial de Lugo** calcular de forma rápida y precisa las fechas de vencimiento de los diferentes plazos administrativos que marca la LCSP, teniendo en cuenta el modo de cómputo en días hábiles/naturales, el inicio ("Dies a Quo"), la prórroga automática y el calendario de festivos aplicable en la región. 
+Esta aplicación permitirá a los empleados públicos de la **Diputación Provincial de Lugo** calcular de forma rápida y precisa las fechas de vencimiento de los diferentes plazos administrativos que marca la LCSP, teniendo en cuenta el modo de cómputo en días hábiles/naturales, el inicio ("Dies a Quo"), la prórroga automática y el calendario de festivos aplicable en la región. 
 
 > [!NOTE]
-> **Aviso de precisión:** Esta plataforma es un recurso diseñado con fines demostrativos y/o educativos. Su estructura y contenido han sido desarrollados mediante metodologías de **Vibe Coding** (IA Generativa), por lo que es posible que existan omisiones o errores de interpretación. Si detectas cualquier error o área de mejora, te agradecería que me lo comunicaras para proceder a su análisis y subsanación.
+> **Aviso de precisión:** Esta aplicación es un recurso diseñado con fines demostrativos y/o educativos que actualmente se encuentra en período de prueba. Su estructura y contenido han sido desarrollados mediante metodologías de **Vibe Coding** (IA Generativa), por lo que es posible que existan omisiones o errores en la aplicación y cálculo de algún plazo. Si detectas cualquier error o área de mejora, te agradecería que me lo comunicaras para proceder a su análisis y subsanación.
 
-## Características ✨
+## 📌 Características 
 
 - ✅ Cálculo preciso de plazos según la LCSP (Ley 9/2017).
 - ✅ Computo en **días naturales** (por defecto) o **días hábiles**.
@@ -39,7 +39,7 @@ Esta aplicación permite a los funcionarios y técnicos de la **Diputación Prov
 - ✅ **Modo oscuro** integrado.
 - ✅ Totalmente **responsive** para escritorio y móvil.
 
-## Arquitectura 🏗️
+## 🏗️ Arquitectura 
 
 ```text
 calculadora-lcsp-lugo-react/
@@ -62,7 +62,7 @@ calculadora-lcsp-lugo-react/
 
 Este ecosistema ha sido desarrollado íntegramente mediante **AI-Driven Development**, orquestando modelos avanzados de lenguaje (LLMs) para la arquitectura, lógica y diseño. Las fases clave han incluido conceptualización arquitectónica, desarrollo de UI/UX premium mediante Tailwind y componentes modernos, así como un proceso iterativo de depuración de código guiado exclusivamente por IA.
 
-## Stack tecnológico 🛠️
+## 🛠️ Stack tecnológico 
 
 | Tecnología | Versión | Uso |
 |---|---|---|
@@ -71,7 +71,7 @@ Este ecosistema ha sido desarrollado íntegramente mediante **AI-Driven Developm
 | [Vite](https://vitejs.dev/) | 6.x | Bundler y servidor de desarrollo |
 | [Tailwind CSS](https://tailwindcss.com/) | 3.x | Estilos y diseño responsive |
 
-## Instalación y puesta en marcha ⚡
+## ⚡ Instalación y puesta en marcha 
 
 ### Requisitos
 
