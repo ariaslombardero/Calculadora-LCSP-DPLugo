@@ -38,10 +38,10 @@ export interface Deadline {
     // Flexibilidad en plazos
     daysType: DaysType;
     days?: number;           // Para 'fixed'
+    months?: number;         // Para plazos que se computan en meses (fecha a fecha)
     minDays?: number;        // Para 'minimum' o 'range'
     maxDays?: number;        // Para 'maximum' o 'range'
     defaultDays?: number;    // Valor por defecto en input
-    months?: number;         // Para cómputo civil (mesesCivil) - fecha a fecha
 
     // Reducciones aplicables
     reductions?: DeadlineReduction[];
@@ -213,27 +213,27 @@ export const DEADLINES_LICITACION: Deadline[] = [
     },
     {
         id: 'super-simplificado',
-        name: 'Simplificado abreviado',
+        name: 'Súper-Simplificado',
         daysType: 'minimum',
         minDays: 10,
         defaultDays: 10,
         dayType: 'habiles',
-        article: 'Art. 159.4 LCSP',
-        description: 'Procedimiento abierto simplificado abreviado (mínimo 10 días hábiles)',
+        article: 'Art. 159.6 LCSP',
+        description: 'Tramitación súper-simplificada (< 80k€ obras / < 60k€ otros)',
         alert: '🔥 Días HÁBILES (mínimo 10)',
         category: 'licitacion',
         subcategory: 'Simplificado'
     },
     {
         id: 'super-simplificado-corriente',
-        name: 'Simplificado superabreviado',
+        name: 'Súper-Simplificado (Bienes corrientes)',
         daysType: 'minimum',
         minDays: 5,
         defaultDays: 5,
         dayType: 'habiles',
-        article: 'Art. 159.4 LCSP',
-        description: 'Procedimiento abierto simplificado superabreviado (5 días hábiles). Modalidad muy excepcional.',
-        alert: '🔥 Plazo crítico - Días HÁBILES (mínimo 5). Modalidad muy excepcional.',
+        article: 'Art. 159.6.a LCSP',
+        description: 'Compras corrientes de bienes disponibles en el mercado',
+        alert: '🔥 Plazo crítico - Días HÁBILES (mínimo 5)',
         category: 'licitacion',
         subcategory: 'Simplificado'
     },
@@ -319,9 +319,9 @@ export const DEADLINES_LICITACION: Deadline[] = [
 export const DEADLINES_ADJUDICACION: Deadline[] = [
     {
         id: 'aportacion-documentacion',
-        name: 'Requerimiento de documentación al propuesto adjudicatario',
+        name: 'Aportación documentación adjudicatario',
         daysType: 'fixed',
-        days: 7,
+        days: 10,
         dayType: 'habiles',
         article: 'Art. 150.2 LCSP',
         description: 'Plazo para aportar documentación y garantía tras propuesta de adjudicación',
@@ -351,13 +351,13 @@ export const DEADLINES_ADJUDICACION: Deadline[] = [
     },
     {
         id: 'adjudicacion-simplificado',
-        name: 'Adjudicación tras recepción documentación',
+        name: 'Adjudicación tras garantía (Simplificado)',
         daysType: 'maximum',
         maxDays: 5,
         defaultDays: 5,
-        dayType: 'habiles',
-        article: 'Art. 150.4 LCSP',
-        description: 'Plazo máximo para adjudicar tras recibir documentación del propuesto adjudicatario',
+        dayType: 'naturales',
+        article: 'Art. 159.4 LCSP',
+        description: 'Plazo máximo para adjudicar tras constituir garantía en simplificado',
         category: 'adjudicacion',
         subcategory: 'Simplificado'
     },
@@ -376,11 +376,12 @@ export const DEADLINES_ADJUDICACION: Deadline[] = [
         id: 'adjudicacion-varios-criterios',
         name: 'Adjudicación (varios criterios)',
         daysType: 'maximum',
-        months: 2,
-        dayType: 'fechaAFecha',
+        maxDays: 60,
+        defaultDays: 60,
+        dayType: 'naturales',
         article: 'Art. 158 LCSP',
-        description: 'Plazo máximo adjudicación con varios criterios (2 meses, cómputo civil fecha a fecha)',
-        alert: '⚠ Plazo de 2 meses computado de fecha a fecha (Art. 29 LCSP y Art. 30.4 Ley 39/2015): el vencimiento cae el mismo día numérico del 2.º mes siguiente al del inicio del cómputo. Si ese día no existe en el mes de destino, se toma el último día de dicho mes. Si el día de vencimiento es inhábil, se prorroga al siguiente día hábil (Art. 30.5 Ley 39/2015). Se amplía en 15 días hábiles adicionales si hay ofertas en valores anormales o desproporcionados.',
+        description: 'Plazo máximo adjudicación con varios criterios (2 meses)',
+        alert: '⏳ Se amplía 15 días hábiles si hay ofertas anormales',
         category: 'adjudicacion'
     },
     {

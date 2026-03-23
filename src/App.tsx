@@ -1,6 +1,6 @@
 /**
  * App - Componente principal de la Calculadora LCSP
- * Concello de Lugo
+ * Diputació de Castelló
  */
 
 import { useState } from 'react';
@@ -87,8 +87,6 @@ function App() {
                                     <li><strong>{t('daysType.naturales')}:</strong> {t('ruleNaturales')}</li>
                                     <li><strong>{t('ruleInhabil').split(':')[0]}:</strong> {t('ruleInhabil')}</li>
                                     <li><strong>{t('holidays')}:</strong> {t('ruleHolidays')}</li>
-                                    <li><strong>{t('daysType.habiles')}:</strong> {t('ruleHabiles')}</li>
-                                    <li><strong>{t('ruleFechaAFechaTitle')}:</strong> {t('ruleFechaAFecha')}</li>
                                 </ul>
                             </div>
                         </div>
