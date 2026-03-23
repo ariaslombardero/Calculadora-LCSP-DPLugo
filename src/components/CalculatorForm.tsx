@@ -160,11 +160,11 @@ export function CalculatorForm({ onCalculate }: CalculatorFormProps) {
                                         if (deadline.daysType === 'fixed' && deadline.days) {
                                             daysInfo = `(${deadline.days} ${daysText})`;
                                         } else if (deadline.daysType === 'minimum' && deadline.minDays) {
-                                            daysInfo = language === 'va'
+                                            daysInfo = language === 'gl'
                                                 ? `(mín. ${deadline.minDays} ${daysText})`
                                                 : `(mín. ${deadline.minDays} ${daysText})`;
                                         } else if (deadline.daysType === 'maximum' && deadline.maxDays) {
-                                            daysInfo = language === 'va'
+                                            daysInfo = language === 'gl'
                                                 ? `(màx. ${deadline.maxDays} ${daysText})`
                                                 : `(máx. ${deadline.maxDays} ${daysText})`;
                                         } else if (deadline.daysType === 'range') {
@@ -233,9 +233,9 @@ export function CalculatorForm({ onCalculate }: CalculatorFormProps) {
                         : 'bg-blue-50 border-blue-200'
                     }`}>
                     <p className={`text-sm ${isDark ? 'text-blue-200' : 'text-blue-800'}`}>
-                        <strong>{language === 'va' ? 'Resum:' : 'Resumen:'}</strong> {language === 'va' ? 'Calcular' : 'Calcular'} <strong>{effectiveDays} {getDaysTypeText(selectedDeadline.dayType)}</strong> {language === 'va' ? 'des de' : 'desde'} {new Date(startDate).toLocaleDateString(language === 'va' ? 'ca-ES' : 'es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                        <strong>{language === 'gl' ? 'Resumo:' : 'Resumen:'}</strong> {language === 'gl' ? 'Calcular' : 'Calcular'} <strong>{effectiveDays} {getDaysTypeText(selectedDeadline.dayType)}</strong> {language === 'gl' ? 'desde' : 'desde'} {new Date(startDate).toLocaleDateString(language === 'gl' ? 'gl-ES' : 'es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                         {appliedReductions.length > 0 && (
-                            <span className={isDark ? 'text-blue-300' : 'text-blue-600'}> ({appliedReductions.length} {language === 'va' ? 'reducció(ns) aplicada(es)' : 'reducción(es) aplicada(s)'})</span>
+                            <span className={isDark ? 'text-blue-300' : 'text-blue-600'}> ({appliedReductions.length} {language === 'gl' ? 'redución(s) aplicada(s)' : 'reducción(es) aplicada(s)'})</span>
                         )}
                     </p>
                 </div>
@@ -256,3 +256,4 @@ export function CalculatorForm({ onCalculate }: CalculatorFormProps) {
         </form>
     );
 }
+

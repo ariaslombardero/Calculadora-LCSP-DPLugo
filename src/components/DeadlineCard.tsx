@@ -57,7 +57,7 @@ export function DeadlineCard({ result, onReset }: DeadlineCardProps) {
     };
 
     const getHolidayTypeLabel = (type: string) => {
-        if (language === 'va') {
+        if (language === 'gl') {
             return type === 'nacional' ? 'Nacional' :
                 type === 'autonomico' ? 'Autonòmic' : 'Local';
         }
@@ -94,19 +94,19 @@ export function DeadlineCard({ result, onReset }: DeadlineCardProps) {
                             <Clock className={`w-5 h-5 ${isDark ? 'text-gray-400' : 'text-diputacio-muted'}`} />
                             {result.isOverdue ? (
                                 <span className={isDark ? 'text-red-400 font-semibold' : 'text-red-700 font-semibold'}>
-                                    {language === 'va'
-                                        ? `Va vèncer fa ${Math.abs(result.daysRemaining)} dies`
+                                    {language === 'gl'
+                                        ? `Venceu hai ${Math.abs(result.daysRemaining)} días`
                                         : `Venció hace ${Math.abs(result.daysRemaining)} días`
                                     }
                                 </span>
                             ) : result.daysRemaining === 0 ? (
                                 <span className={isDark ? 'text-red-400 font-semibold' : 'text-red-700 font-semibold'}>
-                                    {language === 'va' ? 'El termini venç AVUI' : 'El plazo vence HOY'}
+                                    {language === 'gl' ? 'O prazo vence HOXE' : 'El plazo vence HOY'}
                                 </span>
                             ) : (
                                 <span className={config.text}>
-                                    {language === 'va'
-                                        ? <>Queden <strong>{result.daysRemaining} dies</strong> per al venciment</>
+                                    {language === 'gl'
+                                        ? <>Quedan <strong>{result.daysRemaining} días</strong> per al venciment</>
                                         : <>Quedan <strong>{result.daysRemaining} días</strong> para el vencimiento</>
                                     }
                                 </span>
@@ -152,7 +152,7 @@ export function DeadlineCard({ result, onReset }: DeadlineCardProps) {
                                     }`}>
                                     <span className="font-medium">{reduction.label}</span>
                                     <span className={isDark ? 'text-green-400' : 'text-green-600'}>
-                                        ({reduction.days > 0 ? '+' : ''}{reduction.days} {language === 'va' ? 'dies' : 'días'})
+                                        ({reduction.days > 0 ? '+' : ''}{reduction.days} {language === 'gl' ? 'días' : 'días'})
                                     </span>
                                 </li>
                             ) : null;
@@ -241,11 +241,11 @@ export function DeadlineCard({ result, onReset }: DeadlineCardProps) {
 
                             <p className={`text-xs mt-2 italic ${isDark ? 'text-gray-400' : 'text-diputacio-muted'}`}>
                                 {result.dayType === 'habiles'
-                                    ? (language === 'va'
-                                        ? "Aquests festius han sigut exclosos del còmput de dies hàbils"
+                                    ? (language === 'gl'
+                                        ? "Estes festivos foron excluídos do cómputo de días hábiles"
                                         : 'Estos festivos han sido excluidos del cómputo de días hábiles')
-                                    : (language === 'va'
-                                        ? "En dies naturals, els festius compten. Només es prorroga si l'últim dia és inhàbil."
+                                    : (language === 'gl'
+                                        ? "En días naturais, os festivos contan. Só se prorroga se o último día é inhábil."
                                         : 'En días naturales, los festivos cuentan. Solo se prorroga si el último día es inhábil.')
                                 }
                             </p>
@@ -264,13 +264,13 @@ export function DeadlineCard({ result, onReset }: DeadlineCardProps) {
 
                 {/* Nota legal */}
                 <p className={`text-xs mt-4 italic ${isDark ? 'text-gray-400' : 'text-diputacio-muted'}`}>
-                    {language === 'va'
-                        ? "Nota: El còmput comença el dia següent a la data de publicació/notificació."
+                    {language === 'gl'
+                        ? "Nota: O cómputo comeza o día seguinte á data de publicación/notificación."
                         : "Nota: El cómputo comienza el día siguiente a la fecha de publicación/notificación."
                     }
                     {result.dayType === 'habiles'
-                        ? (language === 'va' ? " S'exclouen dissabtes, diumenges i festius." : ' Se excluyen sábados, domingos y festivos.')
-                        : (language === 'va' ? " Si l'últim dia és inhàbil, es prorroga al següent dia hàbil." : ' Si el último día es inhábil, se prorroga al siguiente día hábil.')
+                        ? (language === 'gl' ? " Exclúense sábados, domingos e festivos." : ' Se excluyen sábados, domingos y festivos.')
+                        : (language === 'gl' ? " Se o último día é inhábil, prorrógase ao seguinte día hábil." : ' Si el último día es inhábil, se prorroga al siguiente día hábil.')
                     }
                 </p>
             </div>
@@ -290,3 +290,4 @@ export function DeadlineCard({ result, onReset }: DeadlineCardProps) {
         </div>
     );
 }
+
