@@ -88,11 +88,11 @@ export function DeadlineOptions({ deadline, onDaysChange, onReductionsChange }: 
     };
 
     // Textos traducidos
-    const minLabel = language === 'gl' ? 'mínimo' : 'mínimo';
-    const maxLabel = language === 'gl' ? 'máximo' : 'máximo';
-    const deadlineToApply = language === 'gl' ? 'Prazo a aplicar:' : 'Plazo a aplicar:';
-    const betweenText = language === 'gl' ? 'Prazo entre' : 'Plazo entre';
-    const andText = language === 'gl' ? 'e' : 'y';
+    const minLabel = language === 'gl' ? 'mínim' : 'mínimo';
+    const maxLabel = language === 'gl' ? 'màxim' : 'máximo';
+    const deadlineToApply = language === 'gl' ? 'Termini a aplicar:' : 'Plazo a aplicar:';
+    const betweenText = language === 'gl' ? 'Termini entre' : 'Plazo entre';
+    const andText = language === 'gl' ? 'i' : 'y';
 
     // Render según tipo de plazo
     const renderDaysTypeInfo = () => {
@@ -111,7 +111,7 @@ export function DeadlineOptions({ deadline, onDaysChange, onReductionsChange }: 
                         <div className={`flex items-center gap-2 text-sm px-3 py-2 rounded-sm ${isDark ? 'bg-amber-900/30 text-amber-300' : 'bg-amber-50 text-amber-700'
                             }`}>
                             <Info className="w-4 h-4" />
-                            <span>{language === 'gl' ? 'Prazo' : 'Plazo'} <strong>{minLabel}</strong>: {deadline.minDays} {getDaysTypeText(deadline.dayType)}</span>
+                            <span>{language === 'gl' ? 'Termini' : 'Plazo'} <strong>{minLabel}</strong>: {deadline.minDays} {getDaysTypeText(deadline.dayType)}</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <label className={`text-sm font-medium ${isDark ? 'text-gray-200' : 'text-diputacio-dark'}`}>
@@ -163,7 +163,7 @@ export function DeadlineOptions({ deadline, onDaysChange, onReductionsChange }: 
                         <div className={`flex items-center gap-2 text-sm px-3 py-2 rounded-sm ${isDark ? 'bg-blue-900/30 text-blue-300' : 'bg-blue-50 text-blue-700'
                             }`}>
                             <Info className="w-4 h-4" />
-                            <span>{language === 'gl' ? 'Prazo' : 'Plazo'} <strong>{maxLabel}</strong>: {deadline.maxDays} {getDaysTypeText(deadline.dayType)}</span>
+                            <span>{language === 'gl' ? 'Termini' : 'Plazo'} <strong>{maxLabel}</strong>: {deadline.maxDays} {getDaysTypeText(deadline.dayType)}</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <label className={`text-sm font-medium ${isDark ? 'text-gray-200' : 'text-diputacio-dark'}`}>
@@ -329,7 +329,7 @@ export function DeadlineOptions({ deadline, onDaysChange, onReductionsChange }: 
                                             {reduction.label}
                                         </span>
                                         <span className={`text-xs font-bold ${reduction.days < 0 ? 'text-green-500' : 'text-red-500'}`}>
-                                            {reduction.days > 0 ? '+' : ''}{reduction.days} {language === 'gl' ? 'días' : 'días'}
+                                            {reduction.days > 0 ? '+' : ''}{reduction.days} {language === 'gl' ? 'dies' : 'días'}
                                         </span>
                                     </div>
                                     {reduction.condition && (
