@@ -25,9 +25,6 @@ export const translations = {
         ruleNaturales: 'Por defecto, salvo indicación expresa de días hábiles (DA 12 LCSP)',
         ruleInhabil: 'Último día inhábil: Se prorroga al primer día hábil siguiente',
         ruleHolidays: 'Nacionales, Galicia y locales de Lugo',
-        ruleHabiles: 'Se excluyen sábados, domingos y festivos (nacionales, autonómicos y locales de Lugo). Aplicable cuando el plazo lo indica expresamente (DA 12ª LCSP).',
-        ruleFechaAFechaTitle: 'Cómputo de fecha a fecha',
-        ruleFechaAFecha: 'Para plazos expresados en meses (Art. 29 LCSP y Art. 30.4 Ley 39/2015), el vencimiento cae el mismo día numérico del mes/meses de destino. Si ese día es inhábil, se prorroga al siguiente día hábil (Art. 30.5 Ley 39/2015).',
 
         // Form labels
         phaseLabel: '1. Fase del procedimiento',
@@ -137,9 +134,6 @@ export const translations = {
         ruleNaturales: 'Por defecto, salvo indicación expresa de días hábiles (DA 12 LCSP)',
         ruleInhabil: 'Último día inhábil: Prorrógase ao primeiro día hábil seguinte',
         ruleHolidays: 'Nacionais, Galicia e locais de Lugo',
-        ruleHabiles: 'Exclúense sábados, domingos e festivos (nacionais, autonómicos e locais de Lugo). Aplicable cando o prazo o indica expresamente (DA 12ª LCSP).',
-        ruleFechaAFechaTitle: 'Cómputo de data a data',
-        ruleFechaAFecha: 'Para prazos expresados en meses (Art. 29 LCSP e Art. 30.4 Lei 39/2015), o vencemento cae o mesmo día numérico do mes/meses de destino. Se ese día é inhábil, prorrógase ao seguinte día hábil (Art. 30.5 Lei 39/2015).',
 
         // Form labels
         phaseLabel: '1. Fase do procedemento',
@@ -230,11 +224,5 @@ export const translations = {
     }
 } as const;
 
-export type Language = 'es' | 'gl' | 'va';
+export type Language = 'es' | 'gl';
 export type TranslationKey = keyof typeof translations.es;
-
-// Mapa de idiomas: 'va' redirige a 'es' (legado de versión anterior)
-export const translationsMap = {
-    ...translations,
-    va: translations.es
-};
