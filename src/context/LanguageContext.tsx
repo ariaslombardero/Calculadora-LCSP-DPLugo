@@ -4,7 +4,7 @@
  */
 
 import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
-import { translationsMap, Language } from '../i18n/translations';
+import { translations, Language } from '../i18n/translations';
 
 interface LanguageContextType {
     language: Language;
@@ -18,7 +18,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const [language, setLanguageState] = useState<Language>(() => {
         // Intentar recuperar del localStorage
         const saved = localStorage.getItem('lcsp-language');
-        return (saved === 'es' || saved === 'gl' || saved === 'va') ? saved as Language : 'es';
+        return (saved === 'es' || saved === 'gl') ? saved : 'es';
     });
 
     const setLanguage = useCallback((lang: Language) => {
@@ -28,14 +28,14 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
     const t = useCallback((key: string): string => {
         const keys = key.split('.');
-        let value: unknown = translationsMap[language];
+        let value: unknown = translations[language];
 
         for (const k of keys) {
             if (value && typeof value === 'object' && k in value) {
                 value = (value as Record<string, unknown>)[k];
             } else {
                 // Fallback a español si no existe la traducción
-                value = translationsMap['es'];
+                value = translations['es'];
                 for (const fallbackKey of keys) {
                     if (value && typeof value === 'object' && fallbackKey in value) {
                         value = (value as Record<string, unknown>)[fallbackKey];
