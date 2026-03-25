@@ -91,7 +91,7 @@ Este ecosistema ha sido desarrollado íntegramente mediante **AI-Driven Developm
 
 1. Clonar el repositorio y acceder a la carpeta:
 ```bash
-git clone https://github.com/ariaslombardero/Calculadora-LCSP-DPLugo.git
+git clone https://github.com/ariaslombardero/Calculadora-LCSP-Lugo.git
 cd Calculadora-LCSP-DPLugo
 ```
 
